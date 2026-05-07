@@ -1,0 +1,351 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  /* Cor de fundo cinza para identificar se o vídeo falhar */
+  background-color: #1a1a1a;
+}
+
+#bg-video {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translateX(-50%) translateY(-50%);
+  object-fit: cover;
+  z-index: -1;
+}
+
+.chart-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+#container {
+  width: 100%;
+  height: 100%;
+  max-width: 950px;
+  margin-top: -150px;
+}
+
+.main-title {
+  position: absolute;
+  top: 7%;
+  width: 100%;
+  text-align: center;
+  font-size: 3rem;
+  color: #9a1931;
+  font-weight: 900;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.main-title span {
+  color: #9a1931;
+}
+
+.center-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  text-align: center;
+  pointer-events: none;
+  z-index: 0;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.ufpa-logo {
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.donut-logo-ufpa {
+  width: 200px;
+  height: 180px;
+
+  background-image: url("../img/logo-ufpa.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-bottom: -10px;
+  margin: center;
+}
+
+.ufpa-logo img {
+  width: 150px;
+  height: auto;
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 1));
+}
+
+.center-text {
+  font-size: 1rem;
+  line-height: 1.2;
+  color: #48291d;
+  font-style: bold;
+}
+
+.custom-label {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  position: relative;
+  z-index: 20;
+  will-change: transform;
+  width: max-content;
+  min-width: max-content;
+  white-space: nowrap;
+}
+
+.custom-label:hover {
+  transform: scale(1.05);
+}
+
+.left-layout {
+  flex-direction: row;
+  transform-origin: right center;
+}
+
+.left-layout .label-pill {
+  padding-right: 20px;
+}
+
+.right-layout {
+  flex-direction: row;
+  transform-origin: left center;
+}
+
+.right-layout .label-pill {
+  padding-left: 20px;
+}
+
+.label-icon {
+  width: 85px;
+  height: 85px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  color: #555 !important;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 10;
+  border: none;
+}
+
+.gradient-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  padding: 10px;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.label-icon i {
+  z-index: 1;
+  position: relative;
+}
+
+.label-pill {
+  padding: 0 20px;
+  border-radius: 30px;
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+  white-space: nowrap;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  height: 40px;
+}
+
+.highcharts-data-label {
+  overflow: visible !important;
+}
+
+.highcharts-data-label span,
+.highcharts-data-label div {
+  overflow: visible !important;
+}
+
+.highcharts-data-labels {
+  overflow: visible !important;
+}
+
+.highcharts-container,
+.highcharts-root {
+  overflow: visible !important;
+}
+
+#container,
+.highcharts-container {
+  overflow: visible !important;
+}
+
+.center-text {
+  font-size: 16px;
+  color: #48291d;
+  font-family:
+    open sans,
+    sans-serif;
+}
+
+@media (max-width: 1024px) {
+  #container {
+    margin-top: -40px;
+  }
+  .main-title {
+    top: 8%;
+    font-size: 2.5rem;
+  }
+
+  .label-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+  }
+  .gradient-border {
+    padding: 4px;
+  }
+
+  /* Encolhe as pílulas de texto */
+  .label-pill {
+    height: 24px;
+    font-size: 9px;
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  /* --- NOVAS REGRAS PARA O CENTRO --- */
+  .donut-logo-ufpa {
+    width: 90px;
+    height: 75px;
+  }
+  .center-text {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  #container {
+    min-height: 600px;
+    height: 100vh;
+    margin-top: 20px; /* evita que o donut fique colado */
+  }
+
+  .main-title {
+    top: 4.5%; /* Sobe mais um pouco para fugir do gráfico */
+    font-size: 2rem;
+  }
+
+  /* Redução drástica para caber no celular */
+  .label-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+  .gradient-border {
+    padding: 2px;
+  }
+
+  /* Textos super compactos */
+  .label-pill {
+    height: 18px;
+    font-size: 7.5px;
+    padding: 0 5px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .donut-logo-ufpa {
+    width: 55px;
+    height: 46px;
+    margin-bottom: 6px;
+    transform: translateY(10px);
+  }
+
+  .center-text {
+    font-size: 6.5px;
+    line-height: 1;
+    font-weight: normal;
+  }
+}
+
+@media (max-width: 400px) {
+  #container {
+    margin-top: 0px; /* Aqui o espaço é tão curto que o zero ou -10px costuma ser o ideal */
+  }
+  .titulo-ufpa {
+    font-size: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .main-title {
+    top: 4%;
+    font-size: 1.5rem;
+  }
+
+  .label-pill {
+    height: 14px;
+    font-size: 6px;
+    padding: 0 2px;
+  }
+
+  .label-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+  }
+  .gradient-border {
+    padding: 1.5px;
+  }
+
+  .donut-logo-ufpa {
+    width: 46px; /* <-- AQUI: Logo aumentada (antes era 38px) */
+    height: 38px;
+    margin-bottom: 9px; /* <-- AQUI: O espaçamento entre a logo e a frase */
+    transform: translateY(10px); /* Reajuste para manter no centro exato */
+  }
+
+  .center-text {
+    font-size: 6.5px; /* <-- AQUI: Fonte um pouco maior e mais legível */
+    line-height: 1.1;
+  }
+}

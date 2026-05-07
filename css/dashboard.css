@@ -1,0 +1,166 @@
+/* VARIÁVEIS GLOBAIS */
+:root {
+  --primary-color: #2c58a0; /* Cor azul principal */
+  --hover-color: #f0f6ff; /* Cor de fundo ao passar mouse */
+  --transition-time: 0.3s; /* Duração das animações */
+  --sidebar-expanded: 250px; /* Largura expandida */
+  --sidebar-collapsed: 80px; /* Largura colapsada */
+}
+
+/* RESET E ESTILOS BASE */
+* {
+  box-sizing: border-box; /* Modelo de caixa mais intuitivo */
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  transition: margin-left var(--transition-time) ease; /* Animação suave */
+}
+
+/* ESTILO DA SIDEBAR */
+.side-bar {
+  background-color: white;
+  width: var(--sidebar-expanded);
+  height: 100vh; /* Altura total da viewport */
+  position: fixed; /* Fixa na tela */
+  top: 0;
+  left: 0;
+  box-shadow: 
+  /* 1ª camada: sombra mais próxima e suave */ 0 8px 10px -5px rgba(0, 0, 0, 0.2),
+    /* 2ª camada: sombra média com maior dispersão */ 0 16px 24px 2px
+      rgba(0, 0, 0, 0.14),
+    /* 3ª camada: sombra mais difusa e distante */ 0 6px 30px 5px
+      rgba(0, 0, 0, 0.12);
+
+  /* PARÂMETROS DA SOMBRA EXPLICADOS:
+ 1. Deslocamento horizontal (0 = sem deslocamento lateral)
+ 2. Deslocamento vertical (positivo = para baixo)
+ 3. Blur radius (desfoque) - quanto maior, mais suave
+ 4. Spread (negativo = contrai a sombra)
+ 5. Cor com transparência (rgba)
+*/
+  transition: all var(--transition-time) ease;
+  overflow-x: hidden; /* Esconde overflow horizontal */
+  z-index: 100; /* Garante que fique acima */
+}
+
+/* CABEÇALHO DA SIDEBAR */
+.side-bar-header {
+  padding: 15px;
+  border-bottom: 2px solid #eee; /* Linha divisória */
+}
+
+/* BOTÃO DE TOGGLE */
+.side-bar-header button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all var(--transition-time) ease;
+}
+
+.side-bar-header button:hover {
+  background-color: #1a3a6b; /* Tom mais escuro no hover */
+  transform: translateY(-2px); /* Efeito de levantar */
+}
+
+/* LISTA DE NAVEGAÇÃO */
+.side-bar-nav ul {
+  list-style: none; /* Remove marcadores */
+}
+
+/* ITENS DO MENU - MODO EXPANDIDO (padrão) */
+.side-bar-nav li a {
+  display: flex;
+  flex-direction: row; /* Ícone e texto na mesma linha */
+  align-items: center;
+  padding: 12px 20px;
+  color: #333;
+  text-decoration: none;
+  transition: all var(--transition-time) ease;
+  border-left: 3px solid transparent;
+  gap: 15px; /* Espaço entre ícone e texto */
+}
+
+/* EFEITO DE HOVER */
+.side-bar-nav li a:hover {
+  background-color: #c4c7d0;
+  border-left: 3px solid var(--primary-color);
+}
+
+.selecionado {
+  background-color: #c4c7d0;
+  border-left: 3px solid var(--primary-color);
+}
+
+/* ÍCONES */
+.side-bar-nav li a i {
+  font-size: 22px;
+  min-width: 24px; /* Largura fixa para alinhamento */
+  text-align: center;
+}
+
+/* TEXTOS DOS ITENS - MODO EXPANDIDO */
+.side-bar-nav li a span {
+  font-size: 14px;
+  white-space: nowrap; /* Impede quebra de linha */
+  opacity: 1; /* Sempre visível */
+  transition: all var(--transition-time) ease;
+}
+
+/* MODO COLAPSADO */
+.side-bar.colapsada {
+  width: var(--sidebar-collapsed);
+}
+
+/* BOTÃO NO MODO COLAPSADO */
+.side-bar.colapsada .side-bar-header button {
+  padding: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Transforma em círculo */
+  justify-content: center;
+}
+
+.side-bar.colapsada .side-bar-header button span {
+  display: none; /* Esconde o texto "Menu" */
+}
+
+/* ITENS NO MODO COLAPSADO */
+.side-bar.colapsada .side-bar-nav li a {
+  flex-direction: column; /* Ícone acima do texto */
+  padding: 12px 5px;
+  gap: 5px;
+}
+
+.side-bar.colapsada .side-bar-nav li a span {
+  font-size: 11px;
+  text-align: center;
+  white-space: normal; /* Permite quebra de linha */
+}
+
+.content {
+  width: 100%;
+  height: 100vh; /* Altura total da viewport */
+  padding-left: 80px; /* espaço para a sidebar colapsada, original é 100 */
+  transition: padding-left 0.3s ease;
+}
+
+/* RESPONSIVIDADE - MOBILE */
+@media (max-width: 768px) {
+  .side-bar.colapsada {
+    transform: translateX(0); /* Mostra quando colapsada */
+    width: var(--sidebar-collapsed);
+  }
+
+  body {
+    margin-left: 0 !important;
+  }
+}
