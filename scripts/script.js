@@ -59,14 +59,14 @@ const categories = [
     icon: "fa-building",
     link: "dashboard.html?id=6",
   },
-
-  // --- LADO ESQUERDO ---
   {
     name: "Área da Saúde",
     color: "#1abc9c",
     icon: "fa-hospital",
     link: "dashboard.html?id=5",
   },
+
+  // --- LADO ESQUERDO ---
   {
     name: "Gestão de Pessoas",
     color: "#f1c40f",
@@ -81,10 +81,22 @@ const categories = [
     link: "dashboard.html?id=3",
   },
   {
-    name: "Atividades Acadêmicas",
+    name: "Atividade de Pesquisa",
     color: "#e74c3c",
     icon: "fa-user-graduate",
-    link: "dashboard.html?id=2",
+    link: "dashboard.html?id=2a",
+  },
+  {
+    name: "Atividade de Extensão",
+    color: "#e74c3c",
+    icon: "fa-user-graduate",
+    link: "dashboard.html?id=2b",
+  },
+  {
+    name: "Atividade de Ensino",
+    color: "#e74c3c",
+    icon: "fa-user-graduate",
+    link: "dashboard.html?id=2c",
   },
   {
     name: "Informações Gerais",
@@ -102,8 +114,10 @@ const realData = categories.map((cat) => {
   if (cat.name === "Outras Unidades") {
     configuracaoLabel = isDesktop ? { distance: 70, x: -30 } : undefined;
   } else if (cat.name === "Área da Saúde") {
-    configuracaoLabel = isDesktop ? { distance: 70, x: 30 } : undefined;
-  } else if (cat.name === "Atividades Acadêmicas") {
+    configuracaoLabel = isDesktop ? { distance: 70, x: -33 } : undefined;
+  } else if (cat.name === "Gestão de Pessoas") {
+    configuracaoLabel = isDesktop ? { distance: 70, x: 30, y: 10 } : undefined;
+  } else if (["Atividade de Pesquisa", "Atividade de Extensão", "Atividade de Ensino", ""].includes(cat.name)) {
     configuracaoLabel = !isDesktop ? { x: -35 } : undefined;
   }
 
@@ -195,10 +209,10 @@ Highcharts.chart("container", {
   plotOptions: {
     pie: {
       center: ["50%", "50%"],
-      size: "55%",
+      size: "45%",
       innerSize: "88%",
       borderWidth: 0,
-      startAngle: -30,
+      startAngle: -25,
 
       states: { hover: { halo: false, brightness: 0 } },
 
@@ -273,6 +287,7 @@ Highcharts.chart("container", {
             "Infraestrutura",
             "Indicadores do TCU",
             "Edições Anteriores",
+            "Área da Saúde",
           ];
           const isRightSide = rightSideNames.includes(point.name);
           const layoutClass = isRightSide ? "right-layout" : "left-layout";

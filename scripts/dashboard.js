@@ -5,7 +5,10 @@ const listaSidebar = document.querySelectorAll(".side-bar a");
 
 const linksPowerBI = {
   1: "https://app.powerbi.com/view?r=eyJrIjoiNmFmZjIzNjUtNTE0ZS00YzYxLWI3ZDQtNjhmYzM3OTI0MDJmIiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9",
-  2: "https://app.powerbi.com/view?r=eyJrIjoiOGU2YTQzNDktNTVjYS00Y2ZlLTg2OWMtOTg2ZDNkMTcyYTI1IiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9",
+  "2a": "https://app.powerbi.com/view?r=eyJrIjoiOGU2YTQzNDktNTVjYS00Y2ZlLTg2OWMtOTg2ZDNkMTcyYTI1IiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9",
+  "2b": "https://app.powerbi.com/view?r=eyJrIjoiOGU2YTQzNDktNTVjYS00Y2ZlLTg2OWMtOTg2ZDNkMTcyYTI1IiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9",
+  "2c": "https://app.powerbi.com/view?r=eyJrIjoiOGU2YTQzNDktNTVjYS00Y2ZlLTg2OWMtOTg2ZDNkMTcyYTI1IiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9",
+  "2d": "https://app.powerbi.com/view?r=eyJrIjoiOGU2YTQzNDktNTVjYS00Y2ZlLTg2OWMtOTg2ZDNkMTcyYTI1IiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9",
   3: "https://app.powerbi.com/view?r=eyJrIjoiOTIwNTBkODgtODZmYy00Y2Q4LTg3N2MtYmMzYzlhMWY4N2RhIiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9",
   4: "https://app.powerbi.com/view?r=eyJrIjoiMmUwZjBkNTAtOWZlNi00ZjhlLWI5NjktZTE2ZjFmOTI4NjZlIiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9",
   5: "https://app.powerbi.com/view?r=eyJrIjoiZGQ5ODJiNzAtYjdhYy00MTU3LWJiN2UtMzhhMGJhMjk1MzQ5IiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9",
