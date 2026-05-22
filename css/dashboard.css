@@ -50,6 +50,9 @@ body {
 .side-bar-header {
   padding: 15px;
   border-bottom: 2px solid #eee; /* Linha divisória */
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* BOTÃO DE TOGGLE */
@@ -69,6 +72,72 @@ body {
 .side-bar-header button:hover {
   background-color: #1a3a6b; /* Tom mais escuro no hover */
   transform: translateY(-2px); /* Efeito de levantar */
+}
+
+.language-switcher {
+  display: flex;
+  gap: 4px;
+}
+
+.language-switcher button {
+  position: relative;
+  overflow: hidden;
+  background-color: #fff;
+  color: transparent;
+  border: none;
+  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all var(--transition-time) ease;
+}
+
+.language-btn.flag-br {
+  background: #009b3a;
+}
+
+.language-btn.flag-br::before {
+  content: "";
+  position: absolute;
+  inset: 7px 9px;
+  background: #ffdf00;
+  transform: rotate(45deg);
+}
+
+.language-btn.flag-br::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 13px;
+  height: 13px;
+  background: #002776;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.language-btn.flag-us {
+  background:
+    linear-gradient(#3c3b6e 0 0) 0 0 / 45% 54% no-repeat,
+    repeating-linear-gradient(
+      to bottom,
+      #b22234 0,
+      #b22234 7.69%,
+      #fff 7.69%,
+      #fff 15.38%
+    );
+}
+
+.language-switcher button:hover,
+.language-switcher button.active {
+  outline: 1px solid #1a3a6b;
+}
+
+.language-switcher button.active {
+  box-shadow: 0 0 0 2px rgba(44, 88, 160, 0.35);
+  transform: translateY(-1px);
 }
 
 /* LISTA DE NAVEGAÇÃO */
@@ -131,6 +200,22 @@ body {
 
 .side-bar.colapsada .side-bar-header button span {
   display: none; /* Esconde o texto "Menu" */
+}
+
+.side-bar.colapsada .side-bar-header {
+  flex-direction: column;
+}
+
+.side-bar.colapsada .language-switcher {
+  flex-direction: column;
+}
+
+.side-bar.colapsada .language-switcher button {
+  width: 40px;
+  height: 34px;
+  border-radius: 6px;
+  padding: 0;
+  font-size: 18px;
 }
 
 /* ITENS NO MODO COLAPSADO */

@@ -26,80 +26,91 @@ if (Highcharts.AST) {
     "onclick",
   );
 }
+
+let chartInstance;
+
 const categories = [
-  // --- LADO DIREITO ---
-  // (Lembre de ajustar os IDs para baterem com os do seu objeto linksPowerBI)
   {
-    name: "Edições Anteriores",
+    key: "previousEditions",
+    nameKey: "chart.previousEditions",
     color: "#34495e",
     icon: "fa-clock-rotate-left",
     link: "dashboard.html?id=11",
   },
   {
-    name: "Indicadores do TCU",
+    key: "tcuIndicators",
+    nameKey: "chart.tcuIndicators",
     color: "#8e44ad",
     icon: "fa-chart-line",
     link: "dashboard.html?id=9",
   },
   {
-    name: "Infraestrutura",
+    key: "infrastructure",
+    nameKey: "chart.infrastructure",
     color: "#3498db",
     icon: "fa-city",
     link: "dashboard.html?id=8",
   },
   {
-    name: "Gestão Orçamentária",
+    key: "budgetManagement",
+    nameKey: "chart.budgetManagement",
     color: "#2980b9",
     icon: "fa-coins",
     link: "dashboard.html?id=7",
   },
   {
-    name: "Outras Unidades",
+    key: "otherUnits",
+    nameKey: "chart.otherUnits",
     color: "#16a085",
     icon: "fa-building",
     link: "dashboard.html?id=6",
   },
   {
-    name: "Área da Saúde",
+    key: "healthArea",
+    nameKey: "chart.healthArea",
     color: "#1abc9c",
     icon: "fa-hospital",
     link: "dashboard.html?id=5",
   },
-
-  // --- LADO ESQUERDO ---
   {
-    name: "Gestão de Pessoas",
+    key: "peopleManagement",
+    nameKey: "chart.peopleManagement",
     color: "#f1c40f",
     icon: "fa-users",
     textColor: "#333",
     link: "dashboard.html?id=4",
   },
   {
-    name: "Assistência Estudantil",
+    key: "studentAssistance",
+    nameKey: "chart.studentAssistance",
     color: "#e67e22",
     icon: "fa-book-open-reader",
     link: "dashboard.html?id=3",
   },
   {
-    name: "Atividade de Pesquisa",
+    key: "researchActivity",
+    nameKey: "chart.researchActivity",
     color: "#e74c3c",
     icon: "fa-user-graduate",
     link: "dashboard.html?id=2a",
   },
   {
-    name: "Atividade de Extensão",
+    key: "extensionActivity",
+    nameKey: "chart.extensionActivity",
     color: "#e74c3c",
     icon: "fa-user-graduate",
     link: "dashboard.html?id=2b",
   },
   {
-    name: "Atividade de Ensino",
+    key: "teachingActivity",
+    nameKey: "chart.teachingActivity",
     color: "#e74c3c",
     icon: "fa-user-graduate",
     link: "dashboard.html?id=2c",
   },
   {
-    name: "Informações Gerais",
+    key: "generalInfo",
+    nameKey: "chart.generalInfo",
     color: "#c0392b",
     icon: "fa-globe",
     link: "dashboard.html?id=1",
@@ -108,262 +119,272 @@ const categories = [
 
 const isDesktop = window.innerWidth > 768;
 
-const realData = categories.map((cat) => {
-  let configuracaoLabel = undefined;
+function t(key) {
+  return window.i18n ? window.i18n.t(key) : key;
+}
 
-  if (cat.name === "Outras Unidades") {
-    configuracaoLabel = isDesktop ? { distance: 70, x: -30 } : undefined;
-  } else if (cat.name === "Área da Saúde") {
-    configuracaoLabel = isDesktop ? { distance: 70, x: -33 } : undefined;
-  } else if (cat.name === "Gestão de Pessoas") {
-    configuracaoLabel = isDesktop ? { distance: 70, x: 30, y: 10 } : undefined;
-  } else if (["Atividade de Pesquisa", "Atividade de Extensão", "Atividade de Ensino", ""].includes(cat.name)) {
-    configuracaoLabel = !isDesktop ? { x: -35 } : undefined;
+function renderChart() {
+  const realData = categories.map((cat) => {
+    let configuracaoLabel = undefined;
+
+    if (cat.key === "otherUnits") {
+      configuracaoLabel = isDesktop ? { distance: 70, x: -30 } : undefined;
+    } else if (cat.key === "healthArea") {
+      configuracaoLabel = isDesktop ? { distance: 70, x: -33 } : undefined;
+    } else if (cat.key === "peopleManagement") {
+      configuracaoLabel = isDesktop ? { distance: 70, x: 30, y: 10 } : undefined;
+    } else if (["researchActivity", "extensionActivity", "teachingActivity"].includes(cat.key)) {
+      configuracaoLabel = !isDesktop ? { x: -35 } : undefined;
+    }
+
+    return {
+      y: 1,
+      color: {
+        linearGradient: { x1: 0, x2: 1, y1: 0, y2: 1 },
+        stops: [
+          [0, cat.color],
+          [1, "#1a1a1a"],
+        ],
+      },
+      baseColor: cat.color,
+      name: t(cat.nameKey),
+      key: cat.key,
+      icon: cat.icon,
+      textColor: cat.textColor || "#fff",
+      dataLabels: configuracaoLabel,
+      link: cat.link,
+    };
+  });
+
+  const chartData = [
+    {
+      y: 2,
+      color: "#b4837b",
+      name: "Spacer",
+      dataLabels: { enabled: false },
+      enableMouseTracking: false,
+    },
+    ...realData,
+  ];
+
+  if (chartInstance) {
+    chartInstance.destroy();
   }
 
-  return {
-    y: 1,
-    color: {
-      linearGradient: { x1: 0, x2: 1, y1: 0, y2: 1 },
-      stops: [
-        [0, cat.color],
-        [1, "#1a1a1a"],
+  chartInstance = Highcharts.chart("container", {
+    chart: {
+      type: "pie",
+      backgroundColor: "transparent",
+      height: "100%",
+      style: { fontFamily: "Roboto" },
+      events: {
+        render: function () {
+          const points = this.series[0].points;
+          setTimeout(() => {
+            points.forEach((point) => {
+              let linha = point.connector;
+              if (!linha && point.dataLabel) linha = point.dataLabel.connector;
+              if (!linha && point.dataLabels && point.dataLabels.length > 0)
+                linha = point.dataLabels[0].connector;
+
+              if (linha && linha.element && point.options.baseColor) {
+                const corSolida = point.options.baseColor;
+                linha.element.setAttribute("fill", corSolida);
+                linha.element.style.setProperty("fill", corSolida, "important");
+                linha.element.style.setProperty(
+                  "stroke",
+                  "transparent",
+                  "important",
+                );
+                linha.element.style.setProperty("stroke-width", "0", "important");
+              }
+            });
+          }, 50);
+        },
+      },
+    },
+    title: {
+      text: `
+              <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                
+                <div class="donut-logo-ufpa"></div>
+                
+                <p class="center-text" style="margin: 0; line-height: 1.3;">
+                  ${t("chart.centerText")}
+                </p>
+                
+              </div>
+            `,
+      align: "center",
+      verticalAlign: "middle",
+      useHTML: true,
+      y: 5,
+      style: {
+        width: "300px",
+      },
+    },
+    credits: { enabled: false },
+    tooltip: { enabled: false },
+    accessibility: { enabled: false },
+
+    plotOptions: {
+      pie: {
+        center: ["50%", "50%"],
+        size: "45%",
+        innerSize: "88%",
+        borderWidth: 0,
+        startAngle: -25,
+
+        states: { hover: { halo: false, brightness: 0 } },
+
+        dataLabels: {
+          enabled: true,
+          useHTML: true,
+          distance: 40,
+          crop: false,
+          overflow: "allow",
+          allowOverlap: true,
+
+          connectorShape: function (labelPosition, connectorPosition, options) {
+            if (!labelPosition || !connectorPosition) return "";
+
+            let pDonutX = connectorPosition.touchingSliceAt
+              ? connectorPosition.touchingSliceAt.x
+              : this.labelPos
+                ? this.labelPos[0]
+                : null;
+            let pDonutY = connectorPosition.touchingSliceAt
+              ? connectorPosition.touchingSliceAt.y
+              : this.labelPos
+                ? this.labelPos[1]
+                : null;
+
+            if (pDonutX === null) return "";
+
+            const telaAtual = window.innerWidth;
+            const baseWidth = telaAtual < 768 ? 6 : 12;
+            const fixedHeight = telaAtual < 768 ? 12 : 15;
+            const angle = this.angle;
+
+            let pTipX = pDonutX + Math.cos(angle) * fixedHeight;
+            let pTipY = pDonutY + Math.sin(angle) * fixedHeight;
+
+            const pDonutX1 = pDonutX + Math.cos(angle + Math.PI / 2) * baseWidth;
+            const pDonutY1 = pDonutY + Math.sin(angle + Math.PI / 2) * baseWidth;
+            const pDonutX2 = pDonutX - Math.cos(angle + Math.PI / 2) * baseWidth;
+            const pDonutY2 = pDonutY - Math.sin(angle + Math.PI / 2) * baseWidth;
+
+            return (
+              "M " +
+              pDonutX1 +
+              " " +
+              pDonutY1 +
+              " L " +
+              pTipX +
+              " " +
+              pTipY +
+              " L " +
+              pDonutX2 +
+              " " +
+              pDonutY2 +
+              " Z"
+            );
+          },
+          connectorWidth: 2,
+          connectorPadding: 0,
+
+          formatter: function () {
+            const point = this.point;
+            if (point.name === "Spacer") return null;
+
+            const baseCol = point.options.baseColor;
+            const rightSideKeys = [
+              "otherUnits",
+              "budgetManagement",
+              "infrastructure",
+              "tcuIndicators",
+              "previousEditions",
+              "healthArea",
+            ];
+            const isRightSide = rightSideKeys.includes(point.options.key);
+            const layoutClass = isRightSide ? "right-layout" : "left-layout";
+            const gradiente = `linear-gradient(135deg, ${baseCol}, #1a1a1a)`;
+
+            const linkDestino = point.options.link || "#";
+
+            let html = `<div style="padding: 15px; margin: -15px;">`;
+
+            html += `<div class="custom-label ${layoutClass}" onclick="window.location.href='${linkDestino}'">`;
+            const iconeHTML = `
+                      <div class="label-icon">
+                          <div class="gradient-border" style="background-image: ${gradiente};"></div>
+                          <i class="fa-solid ${point.icon}"></i>
+                      </div>
+                  `;
+
+            const textoHTML = `
+                      <div class="label-pill" style="background-color: ${baseCol}; color: ${point.textColor}">
+                          ${point.name}
+                      </div>
+                  `;
+
+            if (isRightSide) {
+              html += iconeHTML + textoHTML;
+            } else {
+              html += textoHTML + iconeHTML;
+            }
+
+            html += `</div></div>`;
+            return html;
+          },
+        },
+      },
+    },
+    series: [{ name: t("chart.seriesData"), data: chartData }],
+
+    responsive: {
+      rules: [
+        {
+          condition: { maxWidth: 1024 },
+          chartOptions: {
+            plotOptions: {
+              pie: {
+                size: "40%",
+              },
+            },
+          },
+        },
+        {
+          condition: { maxWidth: 768 },
+          chartOptions: {
+            plotOptions: {
+              pie: {
+                size: "35%",
+                dataLabels: {
+                  distance: 10,
+                },
+              },
+            },
+          },
+        },
+        {
+          condition: { maxWidth: 400 },
+          chartOptions: {
+            plotOptions: {
+              pie: {
+                size: "25%",
+                dataLabels: {
+                  distance: 10,
+                },
+              },
+            },
+          },
+        },
       ],
     },
-    baseColor: cat.color,
-    name: cat.name,
-    icon: cat.icon,
-    textColor: cat.textColor || "#fff",
-    dataLabels: configuracaoLabel,
-    link: cat.link,
-  };
-});
+  });
+}
 
-const chartData = [
-  {
-    y: 2,
-    color: "#b4837b",
-    name: "Spacer",
-    dataLabels: { enabled: false },
-    enableMouseTracking: false,
-  },
-  ...realData,
-];
+renderChart();
 
-Highcharts.chart("container", {
-  chart: {
-    type: "pie",
-    backgroundColor: "transparent",
-    height: "100%",
-    style: { fontFamily: "Roboto" },
-    events: {
-      render: function () {
-        const points = this.series[0].points;
-        setTimeout(() => {
-          points.forEach((point) => {
-            let linha = point.connector;
-            if (!linha && point.dataLabel) linha = point.dataLabel.connector;
-            if (!linha && point.dataLabels && point.dataLabels.length > 0)
-              linha = point.dataLabels[0].connector;
-
-            if (linha && linha.element && point.options.baseColor) {
-              const corSolida = point.options.baseColor;
-              linha.element.setAttribute("fill", corSolida);
-              linha.element.style.setProperty("fill", corSolida, "important");
-              linha.element.style.setProperty(
-                "stroke",
-                "transparent",
-                "important",
-              );
-              linha.element.style.setProperty("stroke-width", "0", "important");
-            }
-          });
-        }, 50);
-      },
-    },
-  },
-  title: {
-    text: `
-            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-              
-              <div class="donut-logo-ufpa"></div>
-              
-              <p class="center-text" style="margin: 0; line-height: 1.3;">
-                Dados que fortalecem a<br> gestão e ampliam a<br> transparência
-              </p>
-              
-            </div>
-          `,
-    align: "center",
-    verticalAlign: "middle",
-    useHTML: true,
-    y: 5,
-    style: {
-      width: "300px",
-    },
-  },
-  credits: { enabled: false },
-  tooltip: { enabled: false },
-  accessibility: { enabled: false },
-
-  plotOptions: {
-    pie: {
-      center: ["50%", "50%"],
-      size: "45%",
-      innerSize: "88%",
-      borderWidth: 0,
-      startAngle: -25,
-
-      states: { hover: { halo: false, brightness: 0 } },
-
-      dataLabels: {
-        enabled: true,
-        useHTML: true,
-        distance: 40,
-        crop: false,
-        overflow: "allow",
-        allowOverlap: true,
-
-        connectorShape: function (labelPosition, connectorPosition, options) {
-          if (!labelPosition || !connectorPosition) return "";
-
-          let pDonutX = connectorPosition.touchingSliceAt
-            ? connectorPosition.touchingSliceAt.x
-            : this.labelPos
-              ? this.labelPos[0]
-              : null;
-          let pDonutY = connectorPosition.touchingSliceAt
-            ? connectorPosition.touchingSliceAt.y
-            : this.labelPos
-              ? this.labelPos[1]
-              : null;
-
-          if (pDonutX === null) return "";
-
-          const telaAtual = window.innerWidth;
-
-          // Encolhe os triângulos pela metade no celular
-          const baseWidth = telaAtual < 768 ? 6 : 12;
-          const fixedHeight = telaAtual < 768 ? 12 : 15;
-          const angle = this.angle;
-
-          // Ponta (Irradia reto para fora a partir do centro)
-          let pTipX = pDonutX + Math.cos(angle) * fixedHeight;
-          let pTipY = pDonutY + Math.sin(angle) * fixedHeight;
-
-          // Base (Perfeitamente perpendicular à ponta, colada no donut)
-          const pDonutX1 = pDonutX + Math.cos(angle + Math.PI / 2) * baseWidth;
-          const pDonutY1 = pDonutY + Math.sin(angle + Math.PI / 2) * baseWidth;
-          const pDonutX2 = pDonutX - Math.cos(angle + Math.PI / 2) * baseWidth;
-          const pDonutY2 = pDonutY - Math.sin(angle + Math.PI / 2) * baseWidth;
-
-          return (
-            "M " +
-            pDonutX1 +
-            " " +
-            pDonutY1 +
-            " L " +
-            pTipX +
-            " " +
-            pTipY +
-            " L " +
-            pDonutX2 +
-            " " +
-            pDonutY2 +
-            " Z"
-          );
-        },
-        connectorWidth: 2,
-        connectorPadding: 0,
-
-        formatter: function () {
-          const point = this.point;
-          if (point.name === "Spacer") return null;
-
-          const baseCol = point.options.baseColor;
-          const rightSideNames = [
-            "Outras Unidades",
-            "Gestão Orçamentária",
-            "Infraestrutura",
-            "Indicadores do TCU",
-            "Edições Anteriores",
-            "Área da Saúde",
-          ];
-          const isRightSide = rightSideNames.includes(point.name);
-          const layoutClass = isRightSide ? "right-layout" : "left-layout";
-          const gradiente = `linear-gradient(135deg, ${baseCol}, #1a1a1a)`;
-
-          const linkDestino = point.options.link || "#";
-
-          let html = `<div style="padding: 15px; margin: -15px;">`;
-
-          // MÁGICA AQUI: O onclick formatado perfeitamente para abrir o Power BI
-          html += `<div class="custom-label ${layoutClass}" onclick="window.location.href='${linkDestino}'">`;
-          const iconeHTML = `
-                    <div class="label-icon">
-                        <div class="gradient-border" style="background-image: ${gradiente};"></div>
-                        <i class="fa-solid ${point.icon}"></i>
-                    </div>
-                `;
-
-          const textoHTML = `
-                    <div class="label-pill" style="background-color: ${baseCol}; color: ${point.textColor}">
-                        ${point.name}
-                    </div>
-                `;
-
-          if (isRightSide) {
-            html += iconeHTML + textoHTML;
-          } else {
-            html += textoHTML + iconeHTML;
-          }
-
-          html += `</div></div>`;
-          return html;
-        },
-      },
-    },
-  },
-  series: [{ name: "Dados", data: chartData }],
-
-  responsive: {
-    rules: [
-      {
-        condition: { maxWidth: 1024 },
-        chartOptions: {
-          plotOptions: {
-            pie: {
-              size: "40%",
-            },
-          },
-        },
-      },
-      {
-        condition: { maxWidth: 768 },
-        chartOptions: {
-          plotOptions: {
-            pie: {
-              size: "35%",
-              dataLabels: {
-                distance: 10,
-              },
-            },
-          },
-        },
-      },
-      {
-        condition: { maxWidth: 400 },
-        chartOptions: {
-          plotOptions: {
-            pie: {
-              size: "25%",
-              dataLabels: {
-                distance: 10,
-              },
-            },
-          },
-        },
-      },
-    ],
-  },
-});
+window.addEventListener("languagechange", renderChart);

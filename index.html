@@ -18,14 +18,18 @@
 
   
   </head>
-  <body>
+  <body data-page-title="index.title">
+    <div class="language-switcher" aria-label="Idioma" data-i18n-aria-label="language.label">
+      <button type="button" class="language-btn flag-br" data-language-option="pt" data-lang="pt" aria-label="Português" title="Português"></button>
+      <button type="button" class="language-btn flag-us" data-language-option="en" data-lang="en" aria-label="English" title="English"></button>
+    </div>
     <video id="bg-video" autoplay muted loop playsinline>
       <source src="video/fundo.mp4" type="video/mp4" />
-      Seu navegador não suporta vídeos.
+      <span data-i18n="index.videoFallback">Seu navegador não suporta vídeos.</span>
     </video>
 
     <div class="chart-wrapper">
-      <h1 class="main-title"><span>UFPA</span> em Números</h1>
+      <h1 class="main-title" data-i18n="index.mainTitle"><span>UFPA</span> em Números</h1>
 
       <div class="center-content"></div>
 
@@ -33,6 +37,8 @@
     </div>
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="scripts/translations.js"></script>
+    <script src="scripts/i18n.js"></script>
     <script src="scripts\script.js"></script>
   </body>
 </html>
