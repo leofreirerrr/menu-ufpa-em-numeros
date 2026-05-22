@@ -35,42 +35,48 @@ const categories = [
     nameKey: "chart.previousEditions",
     color: "#34495e",
     icon: "fa-clock-rotate-left",
-    link: "dashboard.html?id=11",
+    linkPt: "dashboard.html?id=11",
+    linkEn: "",
   },
   {
     key: "tcuIndicators",
     nameKey: "chart.tcuIndicators",
     color: "#8e44ad",
     icon: "fa-chart-line",
-    link: "dashboard.html?id=9",
+    linkPt: "dashboard.html?id=9",
+    linkEn: "",
   },
   {
     key: "infrastructure",
     nameKey: "chart.infrastructure",
     color: "#3498db",
     icon: "fa-city",
-    link: "dashboard.html?id=8",
+    linkPt: "dashboard.html?id=8",
+    linkEn: "",
   },
   {
     key: "budgetManagement",
     nameKey: "chart.budgetManagement",
     color: "#2980b9",
     icon: "fa-coins",
-    link: "dashboard.html?id=7",
+    linkPt: "dashboard.html?id=7",
+    linkEn: "",
   },
   {
     key: "otherUnits",
     nameKey: "chart.otherUnits",
     color: "#16a085",
     icon: "fa-building",
-    link: "dashboard.html?id=6",
+    linkPt: "dashboard.html?id=6",
+    linkEn: "",
   },
   {
     key: "healthArea",
     nameKey: "chart.healthArea",
     color: "#1abc9c",
     icon: "fa-hospital",
-    link: "dashboard.html?id=5",
+    linkPt: "dashboard.html?id=5",
+    linkEn: "",
   },
   {
     key: "peopleManagement",
@@ -78,63 +84,271 @@ const categories = [
     color: "#f1c40f",
     icon: "fa-users",
     textColor: "#333",
-    link: "dashboard.html?id=4",
+    linkPt: "dashboard.html?id=4",
+    linkEn: "",
   },
   {
     key: "studentAssistance",
     nameKey: "chart.studentAssistance",
     color: "#e67e22",
     icon: "fa-book-open-reader",
-    link: "dashboard.html?id=3",
+    linkPt: "dashboard.html?id=3",
+    linkEn: "",
   },
   {
     key: "researchActivity",
     nameKey: "chart.researchActivity",
     color: "#e74c3c",
     icon: "fa-user-graduate",
-    link: "dashboard.html?id=2a",
+    linkPt: "dashboard.html?id=2a",
+    linkEn: "",
   },
   {
     key: "extensionActivity",
     nameKey: "chart.extensionActivity",
     color: "#e74c3c",
     icon: "fa-user-graduate",
-    link: "dashboard.html?id=2b",
+    linkPt: "dashboard.html?id=2b",
+    linkEn: "",
   },
   {
     key: "teachingActivity",
     nameKey: "chart.teachingActivity",
     color: "#e74c3c",
     icon: "fa-user-graduate",
-    link: "dashboard.html?id=2c",
+    linkPt: "dashboard.html?id=2c",
+    linkEn: "",
+  },
+  {
+    key: "internationalization",
+    nameKey: "chart.internationalization",
+    color: "#e74c3c",
+    icon: "fa-user-graduate",
+    linkPt: "",
+    linkEn: "",
   },
   {
     key: "generalInfo",
     nameKey: "chart.generalInfo",
     color: "#c0392b",
     icon: "fa-globe",
-    link: "dashboard.html?id=1",
+    linkPt: "dashboard.html?id=1",
+    linkEn: "",
   },
 ];
 
 const isDesktop = window.innerWidth > 768;
+const desktopLabelAdjustments = {
+  otherUnits: { distance: 62, x: -24 },
+  healthArea: { distance: 62, x: -28 },
+  peopleManagement: { distance: 62, y: 8 },
+};
+const mobileLeftAdjustments = [
+  "researchActivity",
+  "extensionActivity",
+  "teachingActivity",
+  "internationalization",
+];
 
 function t(key) {
   return window.i18n ? window.i18n.t(key) : key;
 }
 
+function getCurrentLanguage() {
+  return window.i18n
+    ? window.i18n.getLanguage()
+    : localStorage.getItem("ufpaNumerosLanguage") || "pt";
+}
+
+function getCategoryLink(category) {
+  const language = getCurrentLanguage();
+
+  if (language === "en") {
+    return {
+      url: category.linkEn || "",
+      unavailableKey: "dashboard.englishUnavailable",
+    };
+  }
+
+  return {
+    url: category.linkPt || "",
+    unavailableKey: "dashboard.linkUnavailable",
+  };
+}
+
+window.openMainMenuCard = function (categoryKey) {
+  const category = categories.find((item) => item.key === categoryKey);
+
+  if (!category) {
+    alert(t("dashboard.linkNotFound"));
+    return;
+  }
+
+  const { url, unavailableKey } = getCategoryLink(category);
+
+  if (url) {
+    window.location.href = url;
+    return;
+  }
+
+  alert(t(unavailableKey));
+};
+
+function getMenuLayer(container) {
+  let layer = container.querySelector(".menu-label-layer");
+
+  if (!layer) {
+    layer = document.createElement("div");
+    layer.className = "menu-label-layer";
+    container.appendChild(layer);
+  }
+
+  return layer;
+}
+
+function createConnector(layer, point, centerX, centerY, outerRadius) {
+  const connector = document.createElement("div");
+  const angle = point.angle;
+  const connectorRadius = outerRadius + (window.innerWidth > 768 ? 12 : 7);
+
+  connector.className = "menu-connector";
+  connector.dataset.key = point.options.key;
+  connector.style.backgroundColor = point.options.baseColor;
+  connector.style.left = `${centerX + Math.cos(angle) * connectorRadius}px`;
+  connector.style.top = `${centerY + Math.sin(angle) * connectorRadius}px`;
+  connector.style.transform = `translate(-50%, -50%) rotate(${angle}rad)`;
+  layer.appendChild(connector);
+}
+
+function setMenuHoverState(layer, points, activeKey) {
+  layer.classList.add("menu-hovering", "is-hovering");
+
+  layer.querySelectorAll(".custom-label, .menu-connector").forEach((item) => {
+    item.classList.toggle("is-active", item.dataset.key === activeKey);
+  });
+
+  points.forEach((point) => {
+    if (point.name === "Spacer") {
+      return;
+    }
+
+    const isActive = point.options.key === activeKey;
+    point.graphic?.attr({ opacity: isActive ? 1 : 0.22 });
+    point.setState(isActive ? "hover" : "inactive");
+  });
+}
+
+function clearMenuHoverState(layer, points) {
+  layer.classList.remove("menu-hovering", "is-hovering");
+
+  layer.querySelectorAll(".custom-label, .menu-connector").forEach((item) => {
+    item.classList.remove("is-active");
+  });
+
+  points.forEach((point) => {
+    if (point.name === "Spacer") {
+      return;
+    }
+
+    point.graphic?.attr({ opacity: 1 });
+    point.setState("");
+  });
+}
+
+function createMenuLabel(layer, point, points, centerX, centerY, outerRadius) {
+  const angle = point.angle;
+  const baseCol = point.options.baseColor;
+  const rightSideKeys = [
+    "otherUnits",
+    "budgetManagement",
+    "infrastructure",
+    "tcuIndicators",
+    "previousEditions",
+    "healthArea",
+  ];
+  const isRightSide = rightSideKeys.includes(point.options.key);
+  const layoutClass = isRightSide ? "right-layout" : "left-layout";
+  const labelRadius = outerRadius + (window.innerWidth > 768 ? 126 : 56);
+  const iconSize = window.innerWidth > 1024 ? 78 : window.innerWidth > 768 ? 40 : 30;
+  const desktopOffsets = {
+    previousEditions: { x: 0, y: 34 },
+    tcuIndicators: { x: 0, y: 26 },
+    generalInfo: { x: 0, y: 34 },
+    internationalization: { x: 0, y: 22 },
+    researchActivity: { x: -8, y: -18 },
+    studentAssistance: { x: -30, y: 0 },
+    peopleManagement: { x: 22, y: 42 },
+  };
+  const mobileOffsets = {
+    researchActivity: { x: -6, y: -8 },
+    studentAssistance: { x: -12, y: 8 },
+    peopleManagement: { x: 10, y: 20 },
+  };
+  const offsets = window.innerWidth > 768 ? desktopOffsets : mobileOffsets;
+  const adjustment = offsets[point.options.key] || { x: 0, y: 0 };
+  const iconCenterX = centerX + Math.cos(angle) * labelRadius + adjustment.x;
+  const iconCenterY = centerY + Math.sin(angle) * labelRadius + adjustment.y;
+  const gradiente = `linear-gradient(135deg, ${baseCol}, #1a1a1a)`;
+  const label = document.createElement("div");
+
+  label.className = `custom-label ${layoutClass}`;
+  label.dataset.key = point.options.key;
+  label.onclick = () => window.openMainMenuCard(point.options.key);
+  label.addEventListener("mouseenter", () => {
+    setMenuHoverState(layer, points, point.options.key);
+  });
+  label.addEventListener("mouseleave", () => {
+    clearMenuHoverState(layer, points);
+  });
+
+  const iconHtml = `
+    <div class="label-icon">
+      <div class="gradient-border" style="background-image: ${gradiente};"></div>
+      <i class="fa-solid ${point.options.icon}"></i>
+    </div>
+  `;
+  const textHtml = `
+    <div class="label-pill" style="background-color: ${baseCol}; color: ${point.options.textColor}">
+      ${point.name}
+    </div>
+  `;
+
+  label.innerHTML = isRightSide ? iconHtml + textHtml : textHtml + iconHtml;
+  layer.appendChild(label);
+
+  const labelWidth = label.offsetWidth;
+  const labelHeight = label.offsetHeight;
+  const left = isRightSide
+    ? iconCenterX - iconSize / 2
+    : iconCenterX - labelWidth + iconSize / 2;
+
+  label.style.left = `${left}px`;
+  label.style.top = `${iconCenterY - labelHeight / 2}px`;
+}
+
+function renderMenuOverlay(chart) {
+  const container = document.getElementById("container");
+  const layer = getMenuLayer(container);
+  const center = chart.series[0].center;
+  const centerX = chart.plotLeft + center[0];
+  const centerY = chart.plotTop + center[1];
+  const outerRadius = center[2] / 2;
+  const points = chart.series[0].points.filter((point) => point.name !== "Spacer");
+
+  layer.innerHTML = "";
+
+  points.forEach((point) => {
+    createConnector(layer, point, centerX, centerY, outerRadius);
+    createMenuLabel(layer, point, points, centerX, centerY, outerRadius);
+  });
+}
+
 function renderChart() {
   const realData = categories.map((cat) => {
-    let configuracaoLabel = undefined;
+    let configuracaoLabel = desktopLabelAdjustments[cat.key];
 
-    if (cat.key === "otherUnits") {
-      configuracaoLabel = isDesktop ? { distance: 70, x: -30 } : undefined;
-    } else if (cat.key === "healthArea") {
-      configuracaoLabel = isDesktop ? { distance: 70, x: -33 } : undefined;
-    } else if (cat.key === "peopleManagement") {
-      configuracaoLabel = isDesktop ? { distance: 70, x: 30, y: 10 } : undefined;
-    } else if (["researchActivity", "extensionActivity", "teachingActivity"].includes(cat.key)) {
-      configuracaoLabel = !isDesktop ? { x: -35 } : undefined;
+    if (!isDesktop && mobileLeftAdjustments.includes(cat.key)) {
+      configuracaoLabel = { x: -35 };
     }
 
     return {
@@ -152,7 +366,8 @@ function renderChart() {
       icon: cat.icon,
       textColor: cat.textColor || "#fff",
       dataLabels: configuracaoLabel,
-      link: cat.link,
+      linkPt: cat.linkPt,
+      linkEn: cat.linkEn,
     };
   });
 
@@ -180,6 +395,7 @@ function renderChart() {
       events: {
         render: function () {
           const points = this.series[0].points;
+          renderMenuOverlay(this);
           setTimeout(() => {
             points.forEach((point) => {
               let linha = point.connector;
@@ -230,7 +446,7 @@ function renderChart() {
     plotOptions: {
       pie: {
         center: ["50%", "50%"],
-        size: "45%",
+        size: "42%",
         innerSize: "88%",
         borderWidth: 0,
         startAngle: -25,
@@ -238,9 +454,9 @@ function renderChart() {
         states: { hover: { halo: false, brightness: 0 } },
 
         dataLabels: {
-          enabled: true,
+          enabled: false,
           useHTML: true,
-          distance: 40,
+          distance: 44,
           crop: false,
           overflow: "allow",
           allowOverlap: true,
@@ -298,23 +514,13 @@ function renderChart() {
             if (point.name === "Spacer") return null;
 
             const baseCol = point.options.baseColor;
-            const rightSideKeys = [
-              "otherUnits",
-              "budgetManagement",
-              "infrastructure",
-              "tcuIndicators",
-              "previousEditions",
-              "healthArea",
-            ];
-            const isRightSide = rightSideKeys.includes(point.options.key);
+            const isRightSide = Math.cos(point.angle) >= 0;
             const layoutClass = isRightSide ? "right-layout" : "left-layout";
             const gradiente = `linear-gradient(135deg, ${baseCol}, #1a1a1a)`;
 
-            const linkDestino = point.options.link || "#";
-
             let html = `<div style="padding: 15px; margin: -15px;">`;
 
-            html += `<div class="custom-label ${layoutClass}" onclick="window.location.href='${linkDestino}'">`;
+            html += `<div class="custom-label ${layoutClass}" onclick="window.openMainMenuCard('${point.options.key}')">`;
             const iconeHTML = `
                       <div class="label-icon">
                           <div class="gradient-border" style="background-image: ${gradiente};"></div>

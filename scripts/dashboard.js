@@ -34,7 +34,7 @@ function obterLinkPowerBI(botao) {
 
   return {
     url: linkPt,
-    indisponivel: false,
+    indisponivel: !linkPt,
   };
 }
 
@@ -55,8 +55,8 @@ function carregarPowerBI(event) {
   } else if (indisponivel) {
     alert(
       traduzir(
-        "dashboard.englishUnavailable",
-        "A versão em inglês ainda não está disponível.",
+        idiomaAtual() === "en" ? "dashboard.englishUnavailable" : "dashboard.linkUnavailable",
+        "Link ainda não disponível.",
       ),
     );
   } else {
@@ -101,8 +101,8 @@ if (botaoInicial) {
   } else if (indisponivel) {
     alert(
       traduzir(
-        "dashboard.englishUnavailable",
-        "A versão em inglês ainda não está disponível.",
+        idiomaAtual() === "en" ? "dashboard.englishUnavailable" : "dashboard.linkUnavailable",
+        "Link ainda não disponível.",
       ),
     );
   }

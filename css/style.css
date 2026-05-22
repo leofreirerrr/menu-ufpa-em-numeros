@@ -119,6 +119,54 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
+  position: relative;
+}
+
+.menu-label-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.menu-label-layer .custom-label {
+  position: absolute;
+  pointer-events: auto;
+}
+
+.menu-label-layer.menu-hovering .custom-label:not(.is-active),
+.menu-label-layer.menu-hovering .menu-connector:not(.is-active),
+.menu-label-layer.is-hovering .custom-label:not(.is-active),
+.menu-label-layer.is-hovering .menu-connector:not(.is-active) {
+  opacity: 0.22;
+}
+
+.menu-label-layer .custom-label,
+.menu-label-layer .menu-connector {
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    filter 0.25s ease;
+}
+
+.menu-label-layer .custom-label.is-active {
+  opacity: 1;
+  z-index: 40;
+}
+
+.menu-label-layer .menu-connector.is-active {
+  opacity: 1;
+  z-index: 32;
+}
+
+.menu-connector {
+  position: absolute;
+  width: 24px;
+  height: 18px;
+  clip-path: polygon(100% 50%, 0 0, 0 100%);
+  pointer-events: none;
+  z-index: 18;
 }
 
 .main-title {
@@ -187,7 +235,10 @@ body {
   align-items: center;
   gap: 0;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    filter 0.25s ease;
   position: relative;
   z-index: 20;
   will-change: transform;
@@ -219,8 +270,8 @@ body {
 }
 
 .label-icon {
-  width: 85px;
-  height: 85px;
+  width: 78px;
+  height: 78px;
   flex-shrink: 0;
   border-radius: 50%;
   background: transparent;
@@ -258,17 +309,32 @@ body {
 }
 
 .label-pill {
-  padding: 0 20px;
+  padding: 0 16px;
   border-radius: 30px;
   color: white;
   font-weight: bold;
-  font-size: 13px;
+  font-size: 12.5px;
   white-space: nowrap;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
   z-index: 5;
   display: flex;
   align-items: center;
-  height: 40px;
+  height: 38px;
+}
+
+.highcharts-point {
+  transition:
+    opacity 0.25s ease,
+    filter 0.25s ease;
+}
+
+.label-icon,
+.label-pill,
+.gradient-border {
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    filter 0.25s ease;
 }
 
 .highcharts-data-label {
