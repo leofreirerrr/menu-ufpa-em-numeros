@@ -228,12 +228,7 @@ function setMenuHoverState(layer, points, activeKey) {
   });
 
   points.forEach((point) => {
-    if (point.name === "Spacer") {
-      return;
-    }
-
-    const isActive = point.options.key === activeKey;
-    point.graphic?.attr({ opacity: isActive ? 1 : 0.22 });
+    const isActive = point.options.key && point.options.key === activeKey;
     point.setState(isActive ? "hover" : "inactive");
   });
 }
@@ -246,11 +241,6 @@ function clearMenuHoverState(layer, points) {
   });
 
   points.forEach((point) => {
-    if (point.name === "Spacer") {
-      return;
-    }
-
-    point.graphic?.attr({ opacity: 1 });
     point.setState("");
   });
 }
@@ -333,11 +323,12 @@ function renderMenuOverlay(chart) {
   const centerX = chart.plotLeft + center[0];
   const centerY = chart.plotTop + center[1];
   const outerRadius = center[2] / 2;
-  const points = chart.series[0].points.filter((point) => point.name !== "Spacer");
+  const points = chart.series[0].points;
+  const menuPoints = points.filter((point) => point.name !== "Spacer" && point.options.key);
 
   layer.innerHTML = "";
 
-  points.forEach((point) => {
+  menuPoints.forEach((point) => {
     createConnector(layer, point, centerX, centerY, outerRadius);
     createMenuLabel(layer, point, points, centerX, centerY, outerRadius);
   });
@@ -444,6 +435,17 @@ function renderChart() {
     accessibility: { enabled: false },
 
     plotOptions: {
+      series: {
+        inactiveOtherPoints: true,
+        states: {
+          inactive: {
+            opacity: 0.22,
+            animation: {
+              duration: 160,
+            },
+          },
+        },
+      },
       pie: {
         center: ["50%", "50%"],
         size: "42%",

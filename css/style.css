@@ -145,9 +145,9 @@ body {
 .menu-label-layer .custom-label,
 .menu-label-layer .menu-connector {
   transition:
-    opacity 0.25s ease,
-    transform 0.25s ease,
-    filter 0.25s ease;
+    opacity 0.16s ease,
+    transform 0.16s ease,
+    filter 0.16s ease;
 }
 
 .menu-label-layer .custom-label.is-active {
@@ -236,9 +236,9 @@ body {
   gap: 0;
   cursor: pointer;
   transition:
-    opacity 0.25s ease,
-    transform 0.25s ease,
-    filter 0.25s ease;
+    opacity 0.16s ease,
+    transform 0.16s ease,
+    filter 0.16s ease;
   position: relative;
   z-index: 20;
   will-change: transform;
@@ -324,17 +324,17 @@ body {
 
 .highcharts-point {
   transition:
-    opacity 0.25s ease,
-    filter 0.25s ease;
+    opacity 0.16s ease,
+    filter 0.16s ease;
 }
 
 .label-icon,
 .label-pill,
 .gradient-border {
   transition:
-    opacity 0.25s ease,
-    transform 0.25s ease,
-    filter 0.25s ease;
+    opacity 0.16s ease,
+    transform 0.16s ease,
+    filter 0.16s ease;
 }
 
 .highcharts-data-label {
