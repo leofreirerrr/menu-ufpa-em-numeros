@@ -31,39 +31,12 @@ let chartInstance;
 
 const categories = [
   {
-    key: "previousEditions",
-    nameKey: "chart.previousEditions",
-    color: "#34495e",
-    icon: "fa-clock-rotate-left",
-    link: "dashboard.html?id=11",
-  },
-  {
-    key: "tcuIndicators",
-    nameKey: "chart.tcuIndicators",
-    color: "#8e44ad",
-    icon: "fa-chart-line",
-    link: "dashboard.html?id=9",
-  },
-  {
-    key: "infrastructure",
-    nameKey: "chart.infrastructure",
-    color: "#3498db",
-    icon: "fa-city",
-    link: "dashboard.html?id=8",
-  },
-  {
-    key: "budgetManagement",
-    nameKey: "chart.budgetManagement",
-    color: "#2980b9",
-    icon: "fa-coins",
-    link: "dashboard.html?id=7",
-  },
-  {
-    key: "otherUnits",
-    nameKey: "chart.otherUnits",
-    color: "#16a085",
-    icon: "fa-building",
-    link: "dashboard.html?id=6",
+    key: "peopleManagement",
+    nameKey: "chart.peopleManagement",
+    color: "#f1c40f",
+    icon: "fa-users",
+    textColor: "#333",
+    link: "dashboard.html?id=4",
   },
   {
     key: "healthArea",
@@ -73,12 +46,32 @@ const categories = [
     link: "dashboard.html?id=5",
   },
   {
-    key: "peopleManagement",
-    nameKey: "chart.peopleManagement",
-    color: "#f1c40f",
-    icon: "fa-users",
-    textColor: "#333",
-    link: "dashboard.html?id=4",
+    key: "otherUnits",
+    nameKey: "chart.otherUnits",
+    color: "#16a085",
+    icon: "fa-building",
+    link: "dashboard.html?id=6",
+  },
+  {
+    key: "budgetManagement",
+    nameKey: "chart.budgetManagement",
+    color: "#2980b9",
+    icon: "fa-coins",
+    link: "dashboard.html?id=7",
+  },
+  {
+    key: "infrastructure",
+    nameKey: "chart.infrastructure",
+    color: "#3498db",
+    icon: "fa-city",
+    link: "dashboard.html?id=8",
+  },
+  {
+    key: "tcuIndicators",
+    nameKey: "chart.tcuIndicators",
+    color: "#8e44ad",
+    icon: "fa-chart-line",
+    link: "dashboard.html?id=9",
   },
   {
     key: "studentAssistance",
@@ -88,22 +81,29 @@ const categories = [
     link: "dashboard.html?id=3",
   },
   {
-    key: "researchActivity",
-    nameKey: "chart.researchActivity",
-    color: "#e74c3c",
-    icon: "fa-user-graduate",
-    link: "dashboard.html?id=2a",
+    key: "Internationalization",
+    nameKey: "chart.internationalization",
+    color: "#34495e",
+    icon: "fa-clock-rotate-left",
+    link: "dashboard.html?id=11",
   },
   {
-    key: "extensionActivity",
-    nameKey: "chart.extensionActivity",
+    key: "extension",
+    nameKey: "chart.extension",
     color: "#e74c3c",
     icon: "fa-user-graduate",
     link: "dashboard.html?id=2b",
   },
   {
-    key: "teachingActivity",
-    nameKey: "chart.teachingActivity",
+    key: "research",
+    nameKey: "chart.research",
+    color: "#e74c3c",
+    icon: "fa-user-graduate",
+    link: "dashboard.html?id=2a",
+  },
+  {
+    key: "teaching",
+    nameKey: "chart.teaching",
     color: "#e74c3c",
     icon: "fa-user-graduate",
     link: "dashboard.html?id=2c",
@@ -128,12 +128,14 @@ function renderChart() {
     let configuracaoLabel = undefined;
 
     if (cat.key === "otherUnits") {
-      configuracaoLabel = isDesktop ? { distance: 70, x: -30 } : undefined;
+      configuracaoLabel = isDesktop ? { distance: 70, x: -40, y: 12 } : undefined;
     } else if (cat.key === "healthArea") {
-      configuracaoLabel = isDesktop ? { distance: 70, x: -33 } : undefined;
+      configuracaoLabel = isDesktop ? { distance: 70, x: -33, y: 12 } : undefined;
     } else if (cat.key === "peopleManagement") {
-      configuracaoLabel = isDesktop ? { distance: 70, x: 30, y: 10 } : undefined;
-    } else if (["researchActivity", "extensionActivity", "teachingActivity"].includes(cat.key)) {
+      configuracaoLabel = isDesktop
+        ? { distance: 70, x: 30, y: 24 }
+        : undefined;
+    } else if (["research", "extension", "teaching"].includes(cat.key)) {
       configuracaoLabel = !isDesktop ? { x: -35 } : undefined;
     }
 
@@ -196,7 +198,11 @@ function renderChart() {
                   "transparent",
                   "important",
                 );
-                linha.element.style.setProperty("stroke-width", "0", "important");
+                linha.element.style.setProperty(
+                  "stroke-width",
+                  "0",
+                  "important",
+                );
               }
             });
           }, 50);
@@ -269,10 +275,14 @@ function renderChart() {
             let pTipX = pDonutX + Math.cos(angle) * fixedHeight;
             let pTipY = pDonutY + Math.sin(angle) * fixedHeight;
 
-            const pDonutX1 = pDonutX + Math.cos(angle + Math.PI / 2) * baseWidth;
-            const pDonutY1 = pDonutY + Math.sin(angle + Math.PI / 2) * baseWidth;
-            const pDonutX2 = pDonutX - Math.cos(angle + Math.PI / 2) * baseWidth;
-            const pDonutY2 = pDonutY - Math.sin(angle + Math.PI / 2) * baseWidth;
+            const pDonutX1 =
+              pDonutX + Math.cos(angle + Math.PI / 2) * baseWidth;
+            const pDonutY1 =
+              pDonutY + Math.sin(angle + Math.PI / 2) * baseWidth;
+            const pDonutX2 =
+              pDonutX - Math.cos(angle + Math.PI / 2) * baseWidth;
+            const pDonutY2 =
+              pDonutY - Math.sin(angle + Math.PI / 2) * baseWidth;
 
             return (
               "M " +
@@ -299,11 +309,11 @@ function renderChart() {
 
             const baseCol = point.options.baseColor;
             const rightSideKeys = [
+              "peopleManagement",
               "otherUnits",
               "budgetManagement",
               "infrastructure",
               "tcuIndicators",
-              "previousEditions",
               "healthArea",
             ];
             const isRightSide = rightSideKeys.includes(point.options.key);

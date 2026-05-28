@@ -1,88 +1,188 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UFPA em Números</title>
+    <link rel="icon" href="img/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="css\dashboard.css" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-4C7TK9QXPM"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UFPA em Números</title>
-  <link rel="icon" href="img/favicon.png" type="image/x-icon">
-  <link rel="stylesheet" href="css\dashboard.css" />
-  <link
-    href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    rel="stylesheet" />
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4C7TK9QXPM"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-4C7TK9QXPM");
+    </script>
+  </head>
 
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag('js', new Date());
-    gtag('config', 'G-4C7TK9QXPM');
-  </script>
-</head>
-
-<body data-page-title="site.title">
-  <div class="side-bar">
-    <div class="side-bar-header">
-      <button onclick="Esconder()">
-        <i class="material-icons">menu</i>
-      </button>
-      <div class="language-switcher" aria-label="Idioma" data-i18n-aria-label="language.label">
-        <button type="button" class="language-btn flag-br" data-language-option="pt" data-lang="pt" aria-label="Português" title="Português"></button>
-        <button type="button" class="language-btn flag-us" data-language-option="en" data-lang="en" aria-label="English" title="English"></button>
+  <body data-page-title="site.title">
+    <div class="side-bar">
+      <div class="side-bar-header">
+        <button onclick="Esconder()">
+          <i class="material-icons">menu</i>
+        </button>
+        <div
+          class="language-switcher"
+          aria-label="Idioma"
+          data-i18n-aria-label="language.label"
+        >
+          <button
+            type="button"
+            class="language-btn flag-br"
+            data-language-option="pt"
+            data-lang="pt"
+            aria-label="Português"
+            title="Português"
+          ></button>
+          <button
+            type="button"
+            class="language-btn flag-us"
+            data-language-option="en"
+            data-lang="en"
+            aria-label="English"
+            title="English"
+          ></button>
+        </div>
       </div>
-    </div>
-    <nav class="side-bar-nav">
-      <ul>
-        <li>
-          <a href="#" id="1" data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiNmFmZjIzNjUtNTE0ZS00YzYxLWI3ZDQtNjhmYzM3OTI0MDJmIiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9" data-powerbi-en="">
-            <i class="material-icons">dashboard</i>
-            <span data-i18n="dashboard.generalInfo">Informações gerais</span>
-          </a>
-        </li>
+      <nav class="side-bar-nav">
+        <ul>
+          <li>
+            <a
+              href="#"
+              id="1"
+              data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiNmFmZjIzNjUtNTE0ZS00YzYxLWI3ZDQtNjhmYzM3OTI0MDJmIiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9"
+              data-powerbi-en=""
+            >
+              <i class="material-icons">dashboard</i>
+              <span data-i18n="dashboard.generalInfo">Informações gerais</span>
+            </a>
+          </li>
 
-        <li>
-          <a href="#" id="2a" data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiOGU2YTQzNDktNTVjYS00Y2ZlLTg2OWMtOTg2ZDNkMTcyYTI1IiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9" data-powerbi-en="">
-            <i class="material-icons">school</i>
-            <span data-i18n="dashboard.researchActivity">Atividade de Pesquisa</span>
-          </a>
-        </li>
-        <li>
-          <a href="#" id="2b" data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiOGU2YTQzNDktNTVjYS00Y2ZlLTg2OWMtOTg2ZDNkMTcyYTI1IiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9" data-powerbi-en="">
-            <i class="material-icons">school</i>
-            <span data-i18n="dashboard.extensionActivity">Atividade de Extensão</span>
-          </a>
-        </li>
-        <li>
-          <a href="#" id="2c" data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiOGU2YTQzNDktNTVjYS00Y2ZlLTg2OWMtOTg2ZDNkMTcyYTI1IiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9" data-powerbi-en="">
-            <i class="material-icons">school</i>
-            <span data-i18n="dashboard.teachingActivity">Atividade de Ensino</span>
-          </a>
-        </li>
-        <li>
-          <a href="#" id="3" data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiOTIwNTBkODgtODZmYy00Y2Q4LTg3N2MtYmMzYzlhMWY4N2RhIiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9" data-powerbi-en=""><i class="material-icons">local_library</i><span data-i18n="dashboard.studentAssistance">Assistência estudantil</span></a>
-        </li>
-        <li>
-          <a href="#" id="4" data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiMmUwZjBkNTAtOWZlNi00ZjhlLWI5NjktZTE2ZjFmOTI4NjZlIiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9" data-powerbi-en=""><i class="material-icons">groups</i><span data-i18n="dashboard.peopleManagement">Gestão de pessoas</span></a>
-        </li>
-        <li>
-          <a href="#" id="5" data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiZGQ5ODJiNzAtYjdhYy00MTU3LWJiN2UtMzhhMGJhMjk1MzQ5IiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9" data-powerbi-en=""><i class="material-icons">local_hospital</i><span data-i18n="dashboard.healthArea">Área da saúde</span></a>
-        </li>
-        <li>
-          <a href="#" id="6" data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiNWNkYjJlMWUtNGMyNi00YmU1LWFmZDQtMjBmZjFkZTM0OWNjIiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9" data-powerbi-en=""><i class="material-icons">apartment</i><span data-i18n="dashboard.otherUnits">Outras unidades</span></a>
-        </li>
-        <li>
-          <a href="#" id="7" data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiMzlkZWRiMGEtNTc1ZC00NjZkLTgyYTEtNDYzM2EyMTZhNzYyIiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9" data-powerbi-en=""><i class="material-icons">attach_money</i><span data-i18n="dashboard.budgetManagement">Gestão orçamentária</span></a>
-        </li>
-        <li>
-          <a href="#" id="8" data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiMmUwNTIyZjctZmNlOS00NGMzLWJjN2UtNDZmYWU3OGI1YjZkIiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9" data-powerbi-en=""><i class="material-icons">business</i><span data-i18n="dashboard.infrastructure">Infraestrutura</span></a>
-        </li>
-        <li>
-          <a href="#" id="9" data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiMzhlNWU5OTQtN2ZhMC00ZmMyLWE1OTItM2I0MWE1NDk0ZDBlIiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9" data-powerbi-en=""><i class="material-icons">bar_chart</i><span data-i18n="dashboard.tcuIndicators">Indicadores do TCU</span></a>
-        </li>
-        <!--
+          <li>
+            <a
+              href="#"
+              id="2a"
+              data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiOGU2YTQzNDktNTVjYS00Y2ZlLTg2OWMtOTg2ZDNkMTcyYTI1IiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9"
+              data-powerbi-en=""
+            >
+              <i class="material-icons">school</i>
+              <span data-i18n="dashboard.research"> Pesquisa</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              id="2b"
+              data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiOGU2YTQzNDktNTVjYS00Y2ZlLTg2OWMtOTg2ZDNkMTcyYTI1IiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9"
+              data-powerbi-en=""
+            >
+              <i class="material-icons">school</i>
+              <span data-i18n="dashboard.extension"> Extensão</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              id="2c"
+              data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiOGU2YTQzNDktNTVjYS00Y2ZlLTg2OWMtOTg2ZDNkMTcyYTI1IiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9"
+              data-powerbi-en=""
+            >
+              <i class="material-icons">school</i>
+              <span data-i18n="dashboard.teaching"> Ensino</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              id="3"
+              data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiOTIwNTBkODgtODZmYy00Y2Q4LTg3N2MtYmMzYzlhMWY4N2RhIiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9"
+              data-powerbi-en=""
+              ><i class="material-icons">local_library</i
+              ><span data-i18n="dashboard.studentAssistance"
+                >Assistência estudantil</span
+              ></a
+            >
+          </li>
+          <li>
+            <a
+              href="#"
+              id="4"
+              data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiMmUwZjBkNTAtOWZlNi00ZjhlLWI5NjktZTE2ZjFmOTI4NjZlIiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9"
+              data-powerbi-en=""
+              ><i class="material-icons">groups</i
+              ><span data-i18n="dashboard.peopleManagement"
+                >Gestão de pessoas</span
+              ></a
+            >
+          </li>
+          <li>
+            <a
+              href="#"
+              id="5"
+              data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiZGQ5ODJiNzAtYjdhYy00MTU3LWJiN2UtMzhhMGJhMjk1MzQ5IiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9"
+              data-powerbi-en=""
+              ><i class="material-icons">local_hospital</i
+              ><span data-i18n="dashboard.healthArea">Área da saúde</span></a
+            >
+          </li>
+          <li>
+            <a
+              href="#"
+              id="6"
+              data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiNWNkYjJlMWUtNGMyNi00YmU1LWFmZDQtMjBmZjFkZTM0OWNjIiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9"
+              data-powerbi-en=""
+              ><i class="material-icons">apartment</i
+              ><span data-i18n="dashboard.otherUnits">Outras unidades</span></a
+            >
+          </li>
+          <li>
+            <a
+              href="#"
+              id="7"
+              data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiMzlkZWRiMGEtNTc1ZC00NjZkLTgyYTEtNDYzM2EyMTZhNzYyIiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9"
+              data-powerbi-en=""
+              ><i class="material-icons">attach_money</i
+              ><span data-i18n="dashboard.budgetManagement"
+                >Gestão orçamentária</span
+              ></a
+            >
+          </li>
+          <li>
+            <a
+              href="#"
+              id="8"
+              data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiMmUwNTIyZjctZmNlOS00NGMzLWJjN2UtNDZmYWU3OGI1YjZkIiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9"
+              data-powerbi-en=""
+              ><i class="material-icons">business</i
+              ><span data-i18n="dashboard.infrastructure"
+                >Infraestrutura</span
+              ></a
+            >
+          </li>
+          <li>
+            <a
+              href="#"
+              id="9"
+              data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiMzhlNWU5OTQtN2ZhMC00ZmMyLWE1OTItM2I0MWE1NDk0ZDBlIiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9"
+              data-powerbi-en=""
+              ><i class="material-icons">bar_chart</i
+              ><span data-i18n="dashboard.tcuIndicators"
+                >Indicadores do TCU</span
+              ></a
+            >
+          </li>
+          <!--
           <li>
             <a href="#" id="10"
               ><i class="material-icons">menu_book</i
@@ -90,42 +190,59 @@
             >
           </li>
           -->
-        <li>
-          <a href="#" id="11" data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiYzg2OTIxYmEtMmZkOS00MWZjLWJkZjAtMjlmMjlkNjNjNWE1IiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9" data-powerbi-en=""><i class="material-icons">history</i><span data-i18n="dashboard.previousEditions">Edições anteriores</span></a>
-        </li>
-        <li>
-          <a href="arquivos/UFPAemNumeros/UFPAemNumeros2025_AB2024.pdf" id="pdf" download>
-            <i class="material-icons">picture_as_pdf</i>
-            <span data-i18n="dashboard.pdf">UFPA em Números em PDF</span>
-          </a>
-        </li>
-        <li>
-          <a href="arquivos/Base_de_dados.rar" id="dados" download>
-            <i class="material-icons">download</i>
-            <span data-i18n="dashboard.dataDownload">Download de Dados</span>
-          </a>
-        </li>
-        <li>
-          <a href="arquivos/glossario/Glossario-UFPA_em_numeros_v1.pdf" id="glossario" download>
-            <i class="material-icons">menu_book</i>
-            <span data-i18n="dashboard.glossary">Glossário</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </div>
-  <main class="content">
-    <iframe
-      id="powerbi-frame"
-      src=""
-      width="100%"
-      height="100%"
-      frameborder="0"
-      allowfullscreen="true"></iframe>
-  </main>
-  <script src="scripts/translations.js"></script>
-  <script src="scripts/i18n.js"></script>
-  <script src="scripts\dashboard.js"></script>
-</body>
-
+          <li>
+            <a
+              href="#"
+              id="11"
+              data-powerbi-pt="https://app.powerbi.com/view?r=eyJrIjoiYzg2OTIxYmEtMmZkOS00MWZjLWJkZjAtMjlmMjlkNjNjNWE1IiwidCI6Ijk4ZDM1NmYyLWQzMmEtNDc0Ni04ZmNkLTJhNzM5ZDZlMWE5NSJ9"
+              data-powerbi-en=""
+              ><i class="material-icons">history</i
+              ><span data-i18n="dashboard.previousEditions"
+                >Edições anteriores</span
+              ></a
+            >
+          </li>
+          <li>
+            <a
+              href="arquivos/UFPAemNumeros/UFPAemNumeros2025_AB2024.pdf"
+              id="pdf"
+              download
+            >
+              <i class="material-icons">picture_as_pdf</i>
+              <span data-i18n="dashboard.pdf">UFPA em Números em PDF</span>
+            </a>
+          </li>
+          <li>
+            <a href="arquivos/Base_de_dados.rar" id="dados" download>
+              <i class="material-icons">download</i>
+              <span data-i18n="dashboard.dataDownload">Download de Dados</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="arquivos/glossario/Glossario-UFPA_em_numeros_v1.pdf"
+              id="glossario"
+              download
+            >
+              <i class="material-icons">menu_book</i>
+              <span data-i18n="dashboard.glossary">Glossário</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <main class="content">
+      <iframe
+        id="powerbi-frame"
+        src=""
+        width="100%"
+        height="100%"
+        frameborder="0"
+        allowfullscreen="true"
+      ></iframe>
+    </main>
+    <script src="scripts/translations.js"></script>
+    <script src="scripts/i18n.js"></script>
+    <script src="scripts\dashboard.js"></script>
+  </body>
 </html>
