@@ -30,49 +30,48 @@ if (Highcharts.AST) {
 let chartInstance;
 
 const categories = [
-  {
-    key: "peopleManagement",
-    nameKey: "chart.peopleManagement",
-    color: "#f1c40f",
-    icon: "fa-users",
-    textColor: "#333",
-    link: "dashboard.html?id=4",
-  },
-  {
-    key: "healthArea",
-    nameKey: "chart.healthArea",
-    color: "#1abc9c",
-    icon: "fa-hospital",
-    link: "dashboard.html?id=5",
-  },
-  {
-    key: "otherUnits",
-    nameKey: "chart.otherUnits",
-    color: "#16a085",
-    icon: "fa-building",
-    link: "dashboard.html?id=6",
-  },
-  {
-    key: "budgetManagement",
-    nameKey: "chart.budgetManagement",
-    color: "#2980b9",
-    icon: "fa-coins",
-    link: "dashboard.html?id=7",
-  },
-  {
-    key: "infrastructure",
-    nameKey: "chart.infrastructure",
-    color: "#3498db",
-    icon: "fa-city",
-    link: "dashboard.html?id=8",
-  },
-  {
-    key: "tcuIndicators",
-    nameKey: "chart.tcuIndicators",
-    color: "#8e44ad",
-    icon: "fa-chart-line",
-    link: "dashboard.html?id=9",
-  },
+{
+  key: "tcuIndicators",
+  nameKey: "chart.tcuIndicators",
+  color: "#8e44ad",
+  icon: "fa-chart-line",
+  link: "dashboard.html?id=9",
+},
+{
+  key: "infrastructure",
+  nameKey: "chart.infrastructure",
+  color: "#3498db",
+  icon: "fa-city",
+  link: "dashboard.html?id=8",
+},
+{
+  key: "budgetManagement",
+  nameKey: "chart.budgetManagement",
+  color: "#2980b9",
+  icon: "fa-coins",
+  link: "dashboard.html?id=7",
+},
+{
+  key: "otherUnits",
+  nameKey: "chart.otherUnits",
+  color: "#16a085",
+  icon: "fa-building",
+  link: "dashboard.html?id=6",
+},
+{
+  key: "healthArea",
+  nameKey: "chart.healthArea",
+  color: "#1abc9c",
+  icon: "fa-hospital",
+  link: "dashboard.html?id=5",
+},
+{
+  key: "peopleManagement",
+  nameKey: "chart.peopleManagement",
+  color: "#f1c40f",
+  icon: "fa-users",
+  link: "dashboard.html?id=4",
+},
   {
     key: "studentAssistance",
     nameKey: "chart.studentAssistance",
@@ -83,22 +82,22 @@ const categories = [
   {
     key: "Internationalization",
     nameKey: "chart.internationalization",
-    color: "#34495e",
-    icon: "fa-clock-rotate-left",
+    color: "#e67e22",
+    icon: "fa-earth-americas",
     link: "dashboard.html?id=11",
   },
   {
     key: "extension",
     nameKey: "chart.extension",
     color: "#e74c3c",
-    icon: "fa-user-graduate",
+    icon: "fa-handshake-angle",
     link: "dashboard.html?id=2b",
   },
   {
     key: "research",
     nameKey: "chart.research",
     color: "#e74c3c",
-    icon: "fa-user-graduate",
+    icon: "fa-microscope",
     link: "dashboard.html?id=2a",
   },
   {
@@ -127,17 +126,21 @@ function renderChart() {
   const realData = categories.map((cat) => {
     let configuracaoLabel = undefined;
 
-    if (cat.key === "otherUnits") {
-      configuracaoLabel = isDesktop ? { distance: 70, x: -40, y: 12 } : undefined;
-    } else if (cat.key === "healthArea") {
-      configuracaoLabel = isDesktop ? { distance: 70, x: -33, y: 12 } : undefined;
-    } else if (cat.key === "peopleManagement") {
-      configuracaoLabel = isDesktop
-        ? { distance: 70, x: 30, y: 24 }
-        : undefined;
-    } else if (["research", "extension", "teaching"].includes(cat.key)) {
-      configuracaoLabel = !isDesktop ? { x: -35 } : undefined;
-    }
+if (cat.key === "tcuIndicators") {
+  configuracaoLabel = isDesktop ? { distance: 46, x: 0, y: 0 } : undefined;
+} else if (cat.key === "infrastructure") {
+  configuracaoLabel = isDesktop ? { distance: 48, x: 0, y: 2 } : undefined;
+} else if (cat.key === "budgetManagement") {
+  configuracaoLabel = isDesktop ? { distance: 50, x: 0, y: 4 } : undefined;
+} else if (cat.key === "otherUnits") {
+  configuracaoLabel = isDesktop ? { distance: 52, x: -10, y: 8 } : undefined;
+} else if (cat.key === "healthArea") {
+  configuracaoLabel = isDesktop ? { distance: 54, x: -8, y: 10 } : undefined;
+} else if (cat.key === "peopleManagement") {
+  configuracaoLabel = isDesktop ? { distance: 56, x: -16, y: 10 } : undefined;
+} else if (["research", "extension", "teaching"].includes(cat.key)) {
+  configuracaoLabel = !isDesktop ? { x: -35 } : undefined;
+}
 
     return {
       y: 1,
