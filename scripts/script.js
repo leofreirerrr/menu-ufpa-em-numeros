@@ -84,13 +84,13 @@ const categories = [
     nameKey: "chart.internationalization",
     color: "#e67e22",
     icon: "fa-earth-americas",
-    link: "dashboard.html?id=11",
+    link: "dashboard.html?id=10",
   },
   {
     key: "extension",
     nameKey: "chart.extension",
     color: "#e74c3c",
-    icon: "fa-handshake-angle",
+    icon: "fa-lightbulb",
     link: "dashboard.html?id=2b",
   },
   {

@@ -1,7 +1,7 @@
 // Seleciona os elementos HTML
 const sidebar = document.querySelector(".side-bar");
 const iframe = document.getElementById("powerbi-frame");
-const listaSidebar = document.querySelectorAll(".side-bar a:not([download])");
+const listaSidebar = document.querySelectorAll(".side-bar a[data-powerbi-pt]");
 
 function Esconder() {
   // Alterna (adiciona/remove) a classe "colapsada" no elemento sidebar
@@ -70,7 +70,9 @@ listaSidebar.forEach((botao) => {
 });
 
 window.addEventListener("languagechange", () => {
-  const botaoSelecionado = document.querySelector(".side-bar a.selecionado:not([download])");
+  const botaoSelecionado = document.querySelector(
+    ".side-bar a.selecionado[data-powerbi-pt]",
+  );
 
   if (!botaoSelecionado) {
     return;
@@ -87,7 +89,7 @@ const urlParams = new URLSearchParams(window.location.search);
 let idInicial = urlParams.get("id");
 let botaoInicial = idInicial ? document.getElementById(idInicial) : null;
 
-if (!botaoInicial || !botaoInicial.dataset.powerbiPt) {
+if (!botaoInicial || !("powerbiPt" in botaoInicial.dataset)) {
   idInicial = "1";
   botaoInicial = document.getElementById(idInicial);
 }

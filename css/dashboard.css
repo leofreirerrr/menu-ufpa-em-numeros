@@ -86,8 +86,8 @@ body {
   color: transparent;
   border: none;
   border-radius: 6px;
-  width: 40px;
-  height: 40px;
+  width: 34px;
+  height: 26px;
   padding: 0;
   cursor: pointer;
   font-weight: 700;
@@ -101,9 +101,12 @@ body {
 .language-btn.flag-br::before {
   content: "";
   position: absolute;
-  inset: 7px 9px;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 18px;
   background: #ffdf00;
-  transform: rotate(45deg);
+  transform: translate(-50%, -50%) rotate(45deg);
 }
 
 .language-btn.flag-br::after {
@@ -111,14 +114,16 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 13px;
-  height: 13px;
+  width: 9px;
+  height: 9px;
   background: #002776;
   border-radius: 50%;
   transform: translate(-50%, -50%);
 }
 
 .language-btn.flag-us {
+  width: 34px;
+  height: 26px;
   background:
     linear-gradient(#3c3b6e 0 0) 0 0 / 45% 54% no-repeat,
     repeating-linear-gradient(
@@ -211,8 +216,8 @@ body {
 }
 
 .side-bar.colapsada .language-switcher button {
-  width: 40px;
-  height: 34px;
+  width: 34px;
+  height: 26px;
   border-radius: 6px;
   padding: 0;
   font-size: 18px;
