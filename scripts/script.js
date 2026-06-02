@@ -73,40 +73,40 @@ const categories = [
   link: "dashboard.html?id=4",
 },
   {
-    key: "studentAssistance",
-    nameKey: "chart.studentAssistance",
-    color: "#e67e22",
-    icon: "fa-book-open-reader",
-    link: "dashboard.html?id=3",
-  },
-  {
-    key: "Internationalization",
-    nameKey: "chart.internationalization",
-    color: "#e67e22",
-    icon: "fa-earth-americas",
-    link: "dashboard.html?id=10",
-  },
-  {
-    key: "extension",
-    nameKey: "chart.extension",
-    color: "#e74c3c",
-    icon: "fa-lightbulb",
-    link: "dashboard.html?id=2b",
-  },
-  {
-    key: "research",
-    nameKey: "chart.research",
-    color: "#e74c3c",
-    icon: "fa-microscope",
-    link: "dashboard.html?id=2a",
-  },
-  {
-    key: "teaching",
-    nameKey: "chart.teaching",
-    color: "#e74c3c",
-    icon: "fa-user-graduate",
-    link: "dashboard.html?id=2c",
-  },
+  key: "studentAssistance",
+  nameKey: "chart.studentAssistance",
+  color: "#b86b1f",
+  icon: "fa-book-open-reader",
+  link: "dashboard.html?id=3",
+},
+{
+  key: "internationalization",
+  nameKey: "chart.internationalization",
+  color: "#e67e22",
+  icon: "fa-earth-americas",
+  link: "dashboard.html?id=10",
+},
+{
+  key: "extension",
+  nameKey: "chart.extension",
+  color: "#e74c3c",
+  icon: "fa-lightbulb",
+  link: "dashboard.html?id=2b",
+},
+{
+  key: "research",
+  nameKey: "chart.research",
+  color: "#d8432e",
+  icon: "fa-microscope",
+  link: "dashboard.html?id=2a",
+},
+{
+  key: "teaching",
+  nameKey: "chart.teaching",
+  color: "#c0392b",
+  icon: "fa-user-graduate",
+  link: "dashboard.html?id=2c",
+},
   {
     key: "generalInfo",
     nameKey: "chart.generalInfo",
@@ -126,20 +126,28 @@ function renderChart() {
   const realData = categories.map((cat) => {
     let configuracaoLabel = undefined;
 
-if (cat.key === "tcuIndicators") {
-  configuracaoLabel = isDesktop ? { distance: 46, x: 0, y: 0 } : undefined;
-} else if (cat.key === "infrastructure") {
-  configuracaoLabel = isDesktop ? { distance: 48, x: 0, y: 2 } : undefined;
-} else if (cat.key === "budgetManagement") {
-  configuracaoLabel = isDesktop ? { distance: 50, x: 0, y: 4 } : undefined;
-} else if (cat.key === "otherUnits") {
-  configuracaoLabel = isDesktop ? { distance: 52, x: -10, y: 8 } : undefined;
-} else if (cat.key === "healthArea") {
-  configuracaoLabel = isDesktop ? { distance: 54, x: -8, y: 10 } : undefined;
-} else if (cat.key === "peopleManagement") {
-  configuracaoLabel = isDesktop ? { distance: 56, x: -16, y: 10 } : undefined;
-} else if (["research", "extension", "teaching"].includes(cat.key)) {
-  configuracaoLabel = !isDesktop ? { x: -35 } : undefined;
+const labelPositions = {
+  // lado direito: de cima para baixo
+  tcuIndicators: { distance: 48, x: 0, y: -2 },
+  infrastructure: { distance: 50, x: 0, y: 0 },
+  budgetManagement: { distance: 52, x: 0, y: 2 },
+  otherUnits: { distance: 54, x: -6, y: 4 },
+  healthArea: { distance: 56, x: -8, y: 6 },
+  peopleManagement: { distance: 58, x: -14, y: 6 },
+
+  // lado esquerdo: de cima para baixo
+  generalInfo: { distance: 48, x: 0, y: -2 },
+  teaching: { distance: 50, x: 0, y: 0 },
+  research: { distance: 52, x: 0, y: 2 },
+  extension: { distance: 54, x: 0, y: 4 },
+  internationalization: { distance: 55, x: 8, y: 2 },
+  studentAssistance: { distance: 57, x: 10, y: 2 },
+};
+
+if (isDesktop && labelPositions[cat.key]) {
+  configuracaoLabel = labelPositions[cat.key];
+} else if (!isDesktop && ["research", "extension", "teaching"].includes(cat.key)) {
+  configuracaoLabel = { x: -35 };
 }
 
     return {

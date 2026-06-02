@@ -1,12 +1,12 @@
-- degrade vermelho nos botoes
-- glossario tem q visualizar direto
+- degrade vermelho nos botoes OK
+- glossario tem q visualizar direto OK
 - ensino, pesquisa, extensão, internacionalização(ícone diferente) OK
--cor da assistencia estudantil vai passar a ser da internacionalização e achar outra cor pra assistencia estudantil
--amarelo do gestão de pessoas menos chamativo, e colocar branco na fonte
+-cor da assistencia estudantil vai passar a ser da internacionalização e achar outra cor pra assistencia estudantil OK
+-amarelo do gestão de pessoas menos chamativo, e colocar branco na fonte OK
 -outras areas = outras unidades OK
 -retirar "atividades" OK
 -retirar edições anteriores OK
--versão em pdf no power bi, base de dados
+-versão em pdf no power bi, base de dados OK
 -colocar as bandeiras antes do botão de expandir menu OK
 -diminuir o tamanho das bandeiras no menu OK
 -ajeitar bandeira do brasil OK

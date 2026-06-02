@@ -276,13 +276,6 @@ body {
   height: 40px;
 }
 
-.label-teaching .label-pill,
-.label-research .label-pill,
-.label-extension .label-pill {
-  min-width: 122px;
-  justify-content: center;
-}
-
 .highcharts-data-label {
   overflow: visible !important;
 }
@@ -342,12 +335,6 @@ body {
     white-space: nowrap;
   }
 
-  .label-teaching .label-pill,
-  .label-research .label-pill,
-  .label-extension .label-pill {
-    min-width: 68px;
-  }
-
   /* --- NOVAS REGRAS PARA O CENTRO --- */
   .donut-logo-ufpa {
     width: 90px;
@@ -390,12 +377,6 @@ body {
     white-space: nowrap;
   }
 
-  .label-teaching .label-pill,
-  .label-research .label-pill,
-  .label-extension .label-pill {
-    min-width: 52px;
-  }
-
   .donut-logo-ufpa {
     width: 55px;
     height: 46px;
@@ -429,12 +410,6 @@ body {
     height: 14px;
     font-size: 6px;
     padding: 0 2px;
-  }
-
-  .label-teaching .label-pill,
-  .label-research .label-pill,
-  .label-extension .label-pill {
-    min-width: 42px;
   }
 
   .label-icon {
