@@ -343,11 +343,17 @@ if (isDesktop && labelPositions[cat.key]) {
                       </div>
                   `;
 
-            const textoHTML = `
-                      <div class="label-pill" style="background-color: ${baseCol}; color: ${point.textColor}">
-                          ${point.name}
-                      </div>
-                  `;
+            const widePillKeys = ["teaching", "research", "extension"];
+
+const pillExtraClass = widePillKeys.includes(point.options.key)
+  ? " label-pill-wide"
+  : "";
+
+const textoHTML = `
+          <div class="label-pill${pillExtraClass}" style="background-color: ${baseCol}; color: ${point.textColor}">
+              ${point.name}
+          </div>
+      `;
 
             if (isRightSide) {
               html += iconeHTML + textoHTML;
