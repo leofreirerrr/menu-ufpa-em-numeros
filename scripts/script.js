@@ -116,13 +116,29 @@ const categories = [
   },
 ];
 
-const isDesktop = window.innerWidth > 768;
+const mobileCategoryOrder = [
+  "generalInfo",
+  "teaching",
+  "research",
+  "extension",
+  "internationalization",
+  "studentAssistance",
+  "peopleManagement",
+  "healthArea",
+  "otherUnits",
+  "budgetManagement",
+  "infrastructure",
+  "tcuIndicators",
+];
+
+const mobileMenuMedia = window.matchMedia("(max-width: 768px)");
 
 function t(key) {
   return window.i18n ? window.i18n.t(key) : key;
 }
 
 function renderChart() {
+  const isDesktop = window.innerWidth > 768;
   const realData = categories.map((cat) => {
     let configuracaoLabel = undefined;
 
@@ -279,8 +295,8 @@ if (isDesktop && labelPositions[cat.key]) {
             if (pDonutX === null) return "";
 
             const telaAtual = window.innerWidth;
-            const baseWidth = telaAtual < 768 ? 6 : 12;
-            const fixedHeight = telaAtual < 768 ? 12 : 15;
+            const baseWidth = telaAtual <= 1024 ? 8 : 12;
+            const fixedHeight = telaAtual <= 1024 ? 12 : 15;
             const angle = this.angle;
 
             let pTipX = pDonutX + Math.cos(angle) * fixedHeight;
@@ -412,6 +428,52 @@ const textoHTML = `
   });
 }
 
-renderChart();
+function renderMobileMenu() {
+  if (chartInstance) {
+    chartInstance.destroy();
+    chartInstance = null;
+  }
 
-window.addEventListener("languagechange", renderChart);
+  const container = document.getElementById("container");
+  const categoriesByKey = new Map(
+    categories.map((category) => [category.key, category]),
+  );
+  const mobileCategories = mobileCategoryOrder.map((key) =>
+    categoriesByKey.get(key),
+  );
+  const cards = mobileCategories
+    .map(
+      (cat) => `
+        <a class="mobile-menu-card" href="${cat.link}" style="--card-color: ${cat.color}">
+          <span class="mobile-card-icon" aria-hidden="true">
+            <span class="gradient-border"></span>
+            <i class="fa-solid ${cat.icon}"></i>
+          </span>
+          <span class="mobile-card-label">${t(cat.nameKey)}</span>
+        </a>
+      `,
+    )
+    .join("");
+
+  container.innerHTML = `<nav class="mobile-menu-grid" aria-label="${t("index.mainTitle")}">${cards}</nav>`;
+}
+
+function renderMenu() {
+  if (mobileMenuMedia.matches) {
+    renderMobileMenu();
+    return;
+  }
+
+  renderChart();
+}
+
+let resizeTimer;
+
+window.addEventListener("resize", () => {
+  window.clearTimeout(resizeTimer);
+  resizeTimer = window.setTimeout(renderMenu, 150);
+});
+
+renderMenu();
+
+window.addEventListener("languagechange", renderMenu);
