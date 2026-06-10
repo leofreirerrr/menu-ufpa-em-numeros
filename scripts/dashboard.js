@@ -38,6 +38,14 @@ function obterLinkPowerBI(botao) {
   };
 }
 
+function atualizarIdNaUrl(id) {
+  const novaUrl = new URL(window.location.href);
+  novaUrl.search = "";
+  novaUrl.searchParams.set("id", id);
+  novaUrl.hash = "";
+  window.history.replaceState({}, "", novaUrl.toString());
+}
+
 function carregarPowerBI(event) {
   // Função para trocar o iframe
   event.preventDefault(); // Impede o clique de recarregar a página
@@ -52,6 +60,7 @@ function carregarPowerBI(event) {
 
   if (url) {
     iframe.src = url;
+    atualizarIdNaUrl(event.currentTarget.id);
   } else if (indisponivel) {
     alert(
       traduzir(
