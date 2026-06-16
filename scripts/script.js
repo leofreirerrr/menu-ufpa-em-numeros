@@ -155,7 +155,7 @@ const labelPositions = {
   budgetManagement: { distance: 52, x: 0, y: 2 },
   otherUnits: { distance: 54, x: -6, y: 4 },
   healthArea: { distance: 56, x: -8, y: 6 },
-  peopleManagement: { distance: 58, x: -14, y: 6 },
+  peopleManagement: { distance: 58, x: -6, y: 28 },
 
   // lado esquerdo: de cima para baixo
   generalInfo: { distance: 48, x: 0, y: -2 },
@@ -163,7 +163,7 @@ const labelPositions = {
   research: { distance: 52, x: 0, y: 2 },
   extension: { distance: 54, x: 0, y: 4 },
   internationalization: { distance: 55, x: 8, y: 2 },
-  studentAssistance: { distance: 57, x: 10, y: 2 },
+  studentAssistance: { distance: 57, x: 2, y: 24 },
 };
 
 function getMenuLayer(container) {
