@@ -178,20 +178,57 @@ function getMenuLayer(container) {
   return layer;
 }
 
+function getConnectorLayer(container) {
+  let layer = container.querySelector(".menu-connector-layer");
+
+  if (!layer) {
+    layer = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    layer.classList.add("menu-connector-layer");
+    container.appendChild(layer);
+  }
+
+  layer.setAttribute(
+    "viewBox",
+    `0 0 ${container.clientWidth} ${container.clientHeight}`,
+  );
+  layer.setAttribute("width", container.clientWidth);
+  layer.setAttribute("height", container.clientHeight);
+
+  return layer;
+}
+
 function createConnector(layer, point, centerX, centerY, outerRadius) {
+  const telaAtual = window.innerWidth;
+  const baseWidth = telaAtual < 768 ? 6 : 12;
+  const fixedHeight = telaAtual < 768 ? 12 : 15;
   const angle = point.angle;
-  const connector = document.createElement("div");
-  connector.className = "menu-connector";
+
+  const pDonutX = centerX + Math.cos(angle) * outerRadius;
+  const pDonutY = centerY + Math.sin(angle) * outerRadius;
+
+  const pTipX = pDonutX + Math.cos(angle) * fixedHeight;
+  const pTipY = pDonutY + Math.sin(angle) * fixedHeight;
+
+  const pDonutX1 = pDonutX + Math.cos(angle + Math.PI / 2) * baseWidth;
+  const pDonutY1 = pDonutY + Math.sin(angle + Math.PI / 2) * baseWidth;
+
+  const pDonutX2 = pDonutX - Math.cos(angle + Math.PI / 2) * baseWidth;
+  const pDonutY2 = pDonutY - Math.sin(angle + Math.PI / 2) * baseWidth;
+
+  const connector = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "path",
+  );
+  connector.classList.add("menu-connector");
   connector.dataset.key = point.options.key;
-  connector.style.backgroundColor = point.options.baseColor;
-
-  const connectorDistance = outerRadius + 4;
-  const left = centerX + Math.cos(angle) * connectorDistance;
-  const top = centerY + Math.sin(angle) * connectorDistance;
-
-  connector.style.left = `${left}px`;
-  connector.style.top = `${top}px`;
-  connector.style.transform = `translate(-50%, -50%) rotate(${angle}rad)`;
+  connector.setAttribute(
+    "d",
+    `M ${pDonutX1} ${pDonutY1} L ${pTipX} ${pTipY} L ${pDonutX2} ${pDonutY2} Z`,
+  );
+  connector.setAttribute("fill", point.options.baseColor);
+  connector.setAttribute("stroke", "transparent");
+  connector.setAttribute("stroke-width", "0");
+  connector.setAttribute("pointer-events", "none");
 
   layer.appendChild(connector);
   return connector;
@@ -250,13 +287,25 @@ function createMenuLabel(layer, point, points, centerX, centerY, outerRadius) {
 }
 
 function setMenuHoverState(layer, points, activeKey) {
-  layer.classList.add("menu-hovering", "is-hovering");
+  const connectorLayer = layer.parentElement.querySelector(
+    ".menu-connector-layer",
+  );
 
-  layer
-    .querySelectorAll(".custom-label, .menu-connector")
-    .forEach((element) => {
-      element.classList.toggle("is-active", element.dataset.key === activeKey);
-    });
+  layer.classList.add("menu-hovering", "is-hovering");
+  connectorLayer?.classList.add("menu-hovering", "is-hovering");
+
+  [layer, connectorLayer]
+    .filter(Boolean)
+    .forEach((hoverLayer) =>
+      hoverLayer
+        .querySelectorAll(".custom-label, .menu-connector")
+        .forEach((element) => {
+          element.classList.toggle(
+            "is-active",
+            element.dataset.key === activeKey,
+          );
+        }),
+    );
 
   points.forEach((point) => {
     if (point.options.key && point.options.key !== activeKey) {
@@ -268,11 +317,20 @@ function setMenuHoverState(layer, points, activeKey) {
 }
 
 function clearMenuHoverState(layer, points) {
-  layer.classList.remove("menu-hovering", "is-hovering");
+  const connectorLayer = layer.parentElement.querySelector(
+    ".menu-connector-layer",
+  );
 
-  layer
-    .querySelectorAll(".custom-label, .menu-connector")
-    .forEach((element) => element.classList.remove("is-active"));
+  layer.classList.remove("menu-hovering", "is-hovering");
+  connectorLayer?.classList.remove("menu-hovering", "is-hovering");
+
+  [layer, connectorLayer]
+    .filter(Boolean)
+    .forEach((hoverLayer) =>
+      hoverLayer
+        .querySelectorAll(".custom-label, .menu-connector")
+        .forEach((element) => element.classList.remove("is-active")),
+    );
 
   points.forEach((point) => {
     point.graphic?.css({ opacity: 1 });
@@ -281,6 +339,7 @@ function clearMenuHoverState(layer, points) {
 
 function renderMenuOverlay(chart) {
   const container = chart.renderTo;
+  const connectorLayer = getConnectorLayer(container);
   const layer = getMenuLayer(container);
   const points = chart.series[0].points.filter(
     (point) => point.name !== "Spacer",
@@ -290,11 +349,12 @@ function renderMenuOverlay(chart) {
   const centerY = chart.plotTop + center[1];
   const outerRadius = center[2] / 2;
 
+  connectorLayer.innerHTML = "";
   layer.innerHTML = "";
   clearMenuHoverState(layer, points);
 
   points.forEach((point) => {
-    createConnector(layer, point, centerX, centerY, outerRadius);
+    createConnector(connectorLayer, point, centerX, centerY, outerRadius);
     createMenuLabel(layer, point, points, centerX, centerY, outerRadius);
   });
 }
