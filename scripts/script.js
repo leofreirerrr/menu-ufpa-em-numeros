@@ -137,10 +137,16 @@ function t(key) {
   return window.i18n ? window.i18n.t(key) : key;
 }
 
-function renderChart() {
-  const isDesktop = window.innerWidth > 768;
-  const realData = categories.map((cat) => {
-    let configuracaoLabel = undefined;
+const rightSideKeys = [
+  "peopleManagement",
+  "otherUnits",
+  "budgetManagement",
+  "infrastructure",
+  "tcuIndicators",
+  "healthArea",
+];
+
+const widePillKeys = ["teaching", "research", "extension"];
 
 const labelPositions = {
   // lado direito: de cima para baixo
@@ -160,30 +166,156 @@ const labelPositions = {
   studentAssistance: { distance: 57, x: 10, y: 2 },
 };
 
-if (isDesktop && labelPositions[cat.key]) {
-  configuracaoLabel = labelPositions[cat.key];
-} else if (!isDesktop && ["research", "extension", "teaching"].includes(cat.key)) {
-  configuracaoLabel = { x: -35 };
+function getMenuLayer(container) {
+  let layer = container.querySelector(".menu-label-layer");
+
+  if (!layer) {
+    layer = document.createElement("div");
+    layer.className = "menu-label-layer";
+    container.appendChild(layer);
+  }
+
+  return layer;
 }
 
-    return {
-      y: 1,
-      color: {
-        linearGradient: { x1: 0, x2: 1, y1: 0, y2: 1 },
-        stops: [
-          [0, cat.color],
-          [1, "#1a1a1a"],
-        ],
-      },
-      baseColor: cat.color,
-      name: t(cat.nameKey),
-      key: cat.key,
-      icon: cat.icon,
-      textColor: cat.textColor || "#fff",
-      dataLabels: configuracaoLabel,
-      link: cat.link,
-    };
+function createConnector(layer, point, centerX, centerY, outerRadius) {
+  const angle = point.angle;
+  const connector = document.createElement("div");
+  connector.className = "menu-connector";
+  connector.dataset.key = point.options.key;
+  connector.style.backgroundColor = point.options.baseColor;
+
+  const connectorDistance = outerRadius + 4;
+  const left = centerX + Math.cos(angle) * connectorDistance;
+  const top = centerY + Math.sin(angle) * connectorDistance;
+
+  connector.style.left = `${left}px`;
+  connector.style.top = `${top}px`;
+  connector.style.transform = `translate(-50%, -50%) rotate(${angle}rad)`;
+
+  layer.appendChild(connector);
+  return connector;
+}
+
+function createMenuLabel(layer, point, points, centerX, centerY, outerRadius) {
+  const key = point.options.key;
+  const baseCol = point.options.baseColor;
+  const isRightSide = rightSideKeys.includes(key);
+  const layoutClass = isRightSide ? "right-layout" : "left-layout";
+  const position = labelPositions[key] || { distance: 50, x: 0, y: 0 };
+  const gradiente = `linear-gradient(135deg, ${baseCol}, #1a1a1a)`;
+  const pillExtraClass = widePillKeys.includes(key) ? " label-pill-wide" : "";
+  const label = document.createElement("a");
+  const labelDistance = outerRadius + position.distance;
+  const anchorX = centerX + Math.cos(point.angle) * labelDistance + position.x;
+  const anchorY = centerY + Math.sin(point.angle) * labelDistance + position.y;
+
+  label.className = `custom-label ${layoutClass}`;
+  label.dataset.key = key;
+  label.href = point.options.link || "#";
+  label.style.visibility = "hidden";
+  label.innerHTML = `
+    <div class="label-icon">
+      <div class="gradient-border" style="background-image: ${gradiente};"></div>
+      <i class="fa-solid ${point.options.icon}"></i>
+    </div>
+    <div class="label-pill${pillExtraClass}" style="background-color: ${baseCol}; color: ${point.options.textColor}">
+      ${point.name}
+    </div>
+  `;
+
+  if (!isRightSide) {
+    label.append(label.firstElementChild);
+  }
+
+  label.addEventListener("mouseenter", () => {
+    point.setState("hover");
+    setMenuHoverState(layer, points, key);
   });
+
+  label.addEventListener("mouseleave", () => {
+    point.setState("");
+    clearMenuHoverState(layer, points);
+  });
+
+  layer.appendChild(label);
+
+  const labelWidth = label.offsetWidth;
+  const labelHeight = label.offsetHeight;
+  label.style.left = `${isRightSide ? anchorX : anchorX - labelWidth}px`;
+  label.style.top = `${anchorY - labelHeight / 2}px`;
+  label.style.visibility = "";
+
+  return label;
+}
+
+function setMenuHoverState(layer, points, activeKey) {
+  layer.classList.add("menu-hovering", "is-hovering");
+
+  layer
+    .querySelectorAll(".custom-label, .menu-connector")
+    .forEach((element) => {
+      element.classList.toggle("is-active", element.dataset.key === activeKey);
+    });
+
+  points.forEach((point) => {
+    if (point.options.key && point.options.key !== activeKey) {
+      point.graphic?.css({ opacity: 0.22 });
+    } else if (point.options.key === activeKey) {
+      point.graphic?.css({ opacity: 1 });
+    }
+  });
+}
+
+function clearMenuHoverState(layer, points) {
+  layer.classList.remove("menu-hovering", "is-hovering");
+
+  layer
+    .querySelectorAll(".custom-label, .menu-connector")
+    .forEach((element) => element.classList.remove("is-active"));
+
+  points.forEach((point) => {
+    point.graphic?.css({ opacity: 1 });
+  });
+}
+
+function renderMenuOverlay(chart) {
+  const container = chart.renderTo;
+  const layer = getMenuLayer(container);
+  const points = chart.series[0].points.filter(
+    (point) => point.name !== "Spacer",
+  );
+  const center = chart.series[0].center;
+  const centerX = chart.plotLeft + center[0];
+  const centerY = chart.plotTop + center[1];
+  const outerRadius = center[2] / 2;
+
+  layer.innerHTML = "";
+  clearMenuHoverState(layer, points);
+
+  points.forEach((point) => {
+    createConnector(layer, point, centerX, centerY, outerRadius);
+    createMenuLabel(layer, point, points, centerX, centerY, outerRadius);
+  });
+}
+
+function renderChart() {
+  const realData = categories.map((cat) => ({
+    y: 1,
+    color: {
+      linearGradient: { x1: 0, x2: 1, y1: 0, y2: 1 },
+      stops: [
+        [0, cat.color],
+        [1, "#1a1a1a"],
+      ],
+    },
+    baseColor: cat.color,
+    name: t(cat.nameKey),
+    key: cat.key,
+    icon: cat.icon,
+    textColor: cat.textColor || "#fff",
+    link: cat.link,
+  }));
 
   const chartData = [
     {
@@ -200,6 +332,8 @@ if (isDesktop && labelPositions[cat.key]) {
     chartInstance.destroy();
   }
 
+  document.getElementById("container").innerHTML = "";
+
   chartInstance = Highcharts.chart("container", {
     chart: {
       type: "pie",
@@ -208,31 +342,7 @@ if (isDesktop && labelPositions[cat.key]) {
       style: { fontFamily: "Roboto" },
       events: {
         render: function () {
-          const points = this.series[0].points;
-          setTimeout(() => {
-            points.forEach((point) => {
-              let linha = point.connector;
-              if (!linha && point.dataLabel) linha = point.dataLabel.connector;
-              if (!linha && point.dataLabels && point.dataLabels.length > 0)
-                linha = point.dataLabels[0].connector;
-
-              if (linha && linha.element && point.options.baseColor) {
-                const corSolida = point.options.baseColor;
-                linha.element.setAttribute("fill", corSolida);
-                linha.element.style.setProperty("fill", corSolida, "important");
-                linha.element.style.setProperty(
-                  "stroke",
-                  "transparent",
-                  "important",
-                );
-                linha.element.style.setProperty(
-                  "stroke-width",
-                  "0",
-                  "important",
-                );
-              }
-            });
-          }, 50);
+          renderMenuOverlay(this);
         },
       },
     },
@@ -269,117 +379,31 @@ if (isDesktop && labelPositions[cat.key]) {
         startAngle: -25,
 
         states: { hover: { halo: false, brightness: 0 } },
+        point: {
+          events: {
+            mouseOver: function () {
+              const layer = this.series.chart.renderTo.querySelector(
+                ".menu-label-layer",
+              );
+
+              if (layer && this.options.key) {
+                setMenuHoverState(layer, this.series.points, this.options.key);
+              }
+            },
+            mouseOut: function () {
+              const layer = this.series.chart.renderTo.querySelector(
+                ".menu-label-layer",
+              );
+
+              if (layer) {
+                clearMenuHoverState(layer, this.series.points);
+              }
+            },
+          },
+        },
 
         dataLabels: {
-          enabled: true,
-          useHTML: true,
-          distance: 40,
-          crop: false,
-          overflow: "allow",
-          allowOverlap: true,
-
-          connectorShape: function (labelPosition, connectorPosition, options) {
-            if (!labelPosition || !connectorPosition) return "";
-
-            let pDonutX = connectorPosition.touchingSliceAt
-              ? connectorPosition.touchingSliceAt.x
-              : this.labelPos
-                ? this.labelPos[0]
-                : null;
-            let pDonutY = connectorPosition.touchingSliceAt
-              ? connectorPosition.touchingSliceAt.y
-              : this.labelPos
-                ? this.labelPos[1]
-                : null;
-
-            if (pDonutX === null) return "";
-
-            const telaAtual = window.innerWidth;
-            const baseWidth = telaAtual <= 1024 ? 8 : 12;
-            const fixedHeight = telaAtual <= 1024 ? 12 : 15;
-            const angle = this.angle;
-
-            let pTipX = pDonutX + Math.cos(angle) * fixedHeight;
-            let pTipY = pDonutY + Math.sin(angle) * fixedHeight;
-
-            const pDonutX1 =
-              pDonutX + Math.cos(angle + Math.PI / 2) * baseWidth;
-            const pDonutY1 =
-              pDonutY + Math.sin(angle + Math.PI / 2) * baseWidth;
-            const pDonutX2 =
-              pDonutX - Math.cos(angle + Math.PI / 2) * baseWidth;
-            const pDonutY2 =
-              pDonutY - Math.sin(angle + Math.PI / 2) * baseWidth;
-
-            return (
-              "M " +
-              pDonutX1 +
-              " " +
-              pDonutY1 +
-              " L " +
-              pTipX +
-              " " +
-              pTipY +
-              " L " +
-              pDonutX2 +
-              " " +
-              pDonutY2 +
-              " Z"
-            );
-          },
-          connectorWidth: 2,
-          connectorPadding: 0,
-
-          formatter: function () {
-            const point = this.point;
-            if (point.name === "Spacer") return null;
-
-            const baseCol = point.options.baseColor;
-            const rightSideKeys = [
-              "peopleManagement",
-              "otherUnits",
-              "budgetManagement",
-              "infrastructure",
-              "tcuIndicators",
-              "healthArea",
-            ];
-            const isRightSide = rightSideKeys.includes(point.options.key);
-            const layoutClass = isRightSide ? "right-layout" : "left-layout";
-            const gradiente = `linear-gradient(135deg, ${baseCol}, #1a1a1a)`;
-
-            const linkDestino = point.options.link || "#";
-
-            let html = `<div style="padding: 15px; margin: -15px;">`;
-
-            html += `<div class="custom-label ${layoutClass}" onclick="window.location.href='${linkDestino}'">`;
-            const iconeHTML = `
-                      <div class="label-icon">
-                          <div class="gradient-border" style="background-image: ${gradiente};"></div>
-                          <i class="fa-solid ${point.icon}"></i>
-                      </div>
-                  `;
-
-            const widePillKeys = ["teaching", "research", "extension"];
-
-const pillExtraClass = widePillKeys.includes(point.options.key)
-  ? " label-pill-wide"
-  : "";
-
-const textoHTML = `
-          <div class="label-pill${pillExtraClass}" style="background-color: ${baseCol}; color: ${point.textColor}">
-              ${point.name}
-          </div>
-      `;
-
-            if (isRightSide) {
-              html += iconeHTML + textoHTML;
-            } else {
-              html += textoHTML + iconeHTML;
-            }
-
-            html += `</div></div>`;
-            return html;
-          },
+          enabled: false,
         },
       },
     },
@@ -403,9 +427,6 @@ const textoHTML = `
             plotOptions: {
               pie: {
                 size: "35%",
-                dataLabels: {
-                  distance: 10,
-                },
               },
             },
           },
@@ -416,9 +437,6 @@ const textoHTML = `
             plotOptions: {
               pie: {
                 size: "25%",
-                dataLabels: {
-                  distance: 10,
-                },
               },
             },
           },

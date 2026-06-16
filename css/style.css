@@ -116,6 +116,7 @@ body {
 }
 
 #container {
+  position: relative;
   width: 100%;
   height: 100%;
   max-width: 950px;
@@ -124,6 +125,53 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
+}
+
+.menu-label-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.menu-label-layer .custom-label {
+  position: absolute;
+  pointer-events: auto;
+}
+
+.menu-label-layer.menu-hovering .custom-label:not(.is-active),
+.menu-label-layer.menu-hovering .menu-connector:not(.is-active),
+.menu-label-layer.is-hovering .custom-label:not(.is-active),
+.menu-label-layer.is-hovering .menu-connector:not(.is-active) {
+  opacity: 0.22;
+}
+
+.menu-label-layer .custom-label,
+.menu-label-layer .menu-connector {
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease,
+    filter 0.16s ease;
+}
+
+.menu-label-layer .custom-label.is-active {
+  opacity: 1;
+  z-index: 40;
+}
+
+.menu-label-layer .menu-connector.is-active {
+  opacity: 1;
+  z-index: 32;
+}
+
+.menu-connector {
+  position: absolute;
+  width: 24px;
+  height: 18px;
+  clip-path: polygon(100% 50%, 0 0, 0 100%);
+  pointer-events: none;
+  z-index: 18;
 }
 
 .main-title {
@@ -199,6 +247,7 @@ body {
   width: max-content;
   min-width: max-content;
   white-space: nowrap;
+  text-decoration: none;
 }
 
 .custom-label:hover {
@@ -279,7 +328,6 @@ body {
   min-width: 120px;
   padding-left: 20px;
   padding-right: 20px;
-  margin-left: -35px;
   margin-right: 0;
   justify-content: center;
   text-align: center;
